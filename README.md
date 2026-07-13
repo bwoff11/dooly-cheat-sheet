@@ -1,6 +1,6 @@
 # Dooley Runbook
 
-A patch-locked, in-run cheat sheet for playing Dooley in **The Bazaar**. It organizes current mechanics and high-ranked community strategy by Core, including supported build archetypes, purchase priorities, activation order, merchant targets, and pivot conditions.
+A patch-locked strategy reference for playing Dooley in **The Bazaar**. It sits between a quick in-run cheat sheet and a comprehensive guide: current mechanics, ranked items, proven synergy packages, build archetypes, activation order, merchant targets, matchup context, and pivot conditions are organized by Core.
 
 **Live site:** https://bwoff11.github.io/dooly-cheat-sheet/
 
@@ -8,6 +8,9 @@ A patch-locked, in-run cheat sheet for playing Dooley in **The Bazaar**. It orga
 
 - Patch 16, reviewed against revision 16.1
 - Seven starting Core choices plus a Launcher specialist route
+- A synthesized top-20 Dooley item tier list
+- Ten Core-specific item priorities for every route
+- Four synergy packages per Core, including operational and failure conditions
 - Three recommended build archetypes per Core
 - Buy / hold / skip priorities
 - Activation order and priorities by run phase

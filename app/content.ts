@@ -46,6 +46,42 @@ export type CoreGuide = {
   sources: string[];
 };
 
+export type ItemTier = "S" | "A" | "B";
+
+export type RankedItem = {
+  name: string;
+  tier: ItemTier;
+  why: string;
+};
+
+export type SynergyPackage = {
+  name: string;
+  grade: ItemTier;
+  items: string[];
+  plan: string;
+  online: string;
+  breaks: string;
+};
+
+export type CoreDepth = {
+  northStar: string;
+  bottleneck: string;
+  firstBreakpoint: string;
+  exitRule: string;
+  itemRanks: RankedItem[];
+  synergies: SynergyPackage[];
+  matchup: {
+    favored: string;
+    respect: string;
+    adapt: string;
+  };
+};
+
+export type GlobalRankedItem = RankedItem & {
+  role: string;
+  bestIn: string;
+};
+
 export const patchInfo = {
   major: "16",
   revision: "16.1",
@@ -84,6 +120,16 @@ export const sources = {
     label: "BazaarDB current card data",
     href: "https://bazaardb.gg/",
     type: "Card database",
+  },
+  itemTier: {
+    label: "Season 16 expert Dooley item tier list",
+    href: "https://unduel.com/u/bazaardb/dooley-items-the-bazaar-2sREbzTKaJdlKLskUoeiMW/tier-list/experts",
+    type: "Expert tier list",
+  },
+  patchDb: {
+    label: "BazaarDB Patch 16.1 hotfix tracker",
+    href: "https://sin.bazaardb.gg/patchnotes/16.1-jul8",
+    type: "Patch database",
   },
 } as const;
 
@@ -197,7 +243,7 @@ export const cores: CoreGuide[] = [
     tempo: "Late ceiling",
     accent: "violet",
     mechanic:
-      "7 / 6 / 5 sec · At fight start, 2 / 3 / 4 other items start Flying. On use, Charge other Flying items 1 sec. Another Friend or Flying item use Charges Launcher Core 1 sec.",
+      "6 sec at every tier · At fight start, 2 / 3 / 4 other items start Flying. On use, Charge other Flying items 1 sec. Another Friend or Flying item use Charges Launcher Core 1 sec.",
     summary:
       "Launcher requires multiple Flying or Friend activations. Its output increases substantially when Launcher and its payoffs charge one another repeatedly; isolated Flying items are insufficient.",
     plan:
@@ -596,6 +642,232 @@ export const cores: CoreGuide[] = [
     patchChange: "Patch 16 changed base Damage from a flat 20 to 40 / 80 / 160, greatly improving upgraded Core damage.",
     sources: ["official", "expert", "bazaarDb"],
   },
+];
+
+export const coreDepthById: Record<string, CoreDepth> = {
+  "the-core": {
+    northStar: "Convert many cheap activations into repeated casts from one premium right-side carry.",
+    bottleneck: "The Core supplies actions, not a win condition. A board with no scalable payoff only cycles low-impact items faster.",
+    firstBreakpoint: "An upgraded carry plus a Silver 4–5 second Haste source, or a fast left-side trigger that makes the Core act before the carry.",
+    exitRule: "Remove The Core when a self-contained legendary package creates more useful actions without paying the support-slot tax.",
+    itemRanks: [
+      { name: "Power Drill", tier: "S", why: "Patch-defining carry when the board already produces frequent Haste, Slow, Freeze, Poison, or Burn triggers." },
+      { name: "RAMPage Module", tier: "S", why: "Turns repeated status applications into adjacent Damage and Burn scaling; the current Drill shell is built around it." },
+      { name: "Fiber Optics", tier: "S", why: "Lets the fastest leftmost activation charge the rightmost carry and closes several late charge loops." },
+      { name: "Metronome", tier: "S", why: "Links a fast activator to the Core or carry and often solves both first-cast timing and sustained Haste." },
+      { name: "SMG", tier: "A", why: "Accessible fast trigger that helps the Core activate before a slower payoff." },
+      { name: "Remote Control", tier: "A", why: "Compact acceleration for charge-focused boards; strongest when it improves an already real carry." },
+      { name: "Plasma Grenade", tier: "A", why: "Front-loads disruption, supplies status triggers for Drill, and fits several early Core openers." },
+      { name: "Dooley's Scarf", tier: "A", why: "Current Drill support that converts Freeze activity into adjacent Haste while protecting key pieces from Freeze." },
+      { name: "GPU", tier: "B", why: "Useful on the right at Silver+ when repeated Core charges can maintain Haste; otherwise it costs too much space." },
+      { name: "Weakpoint Detector", tier: "B", why: "A midgame weapon scaler when Slow is already frequent; rarely the reason to force a route by itself." },
+    ],
+    synergies: [
+      { name: "RAMPage Drill", grade: "S", items: ["Power Drill", "RAMPage Module", "Fiber Optics", "status engine"], plan: "Place RAMPage between the pieces that most benefit from scaling, then use status density to charge Drill and grow both sides of the module.", online: "Drill receives several status triggers before its first natural cooldown and RAMPage is scaling two relevant items.", breaks: "Unsupported Drill is slow. If statuses are sparse or RAMPage only buffs filler, use a conventional carry instead." },
+      { name: "Core timing bridge", grade: "S", items: ["SMG", "Metronome", "The Core", "premium carry"], plan: "Use the fast left side to cycle Core, and tune placement so the right-side carry receives acceleration before its first important cast.", online: "The Core acts before the carry and both repeat at least once inside the expected fight window.", breaks: "Do not add another trigger if it delays the carry or consumes the slot needed for defense or control." },
+      { name: "Freeze-control charger", grade: "A", items: ["Dooley's Scarf", "Isochoric Freezer", "Fiber Optics", "carry"], plan: "Freeze buys time, Scarf converts Freeze into Haste, and Fiber turns the fastest edge activation into more carry casts.", online: "Freeze happens early enough to change the opponent's first cycle and the carry remains the rightmost active target.", breaks: "If the control package does not alter startup or the carry is under-upgraded, the board has utility without lethal output." },
+      { name: "Dooltron handoff", grade: "A", items: ["Dooltron", "Plasma Grenade", "Power Sander", "compact triggers"], plan: "Use The Core shell to reach Gold items, then replace early filler with status and Friend triggers that activate Dooltron repeatedly.", online: "Dooltron is upgraded and its internal triggers fire often enough that speed or Multicast—not more tags—is the bottleneck.", breaks: "Do not hold dead tags for an unseen Dooltron or preserve The Core after it reduces trigger density." },
+    ],
+    matchup: { favored: "Slower boards that allow multiple Core-to-carry cycles.", respect: "Immediate burst, heavy Freeze on the carry, and disruption that separates the trigger chain.", adapt: "Use one defensive or control slot, then re-test whether the Core still acts before the primary payoff." },
+  },
+  "launcher-core": {
+    northStar: "Make Launcher and a small number of high-impact Flying items charge one another until the board loops.",
+    bottleneck: "Startup. Too many low-impact active items dilute the first Flying targets and delay the loop.",
+    firstBreakpoint: "A stable coreless opener, or defense plus a strong Multicast item and Levitation Pad; later, a Flying Launcher with meaningful cooldown reduction.",
+    exitRule: "Keep Launcher when it materially closes the loop. Drop it only when a complete carry package already Multicasts and cycles faster without it.",
+    itemRanks: [
+      { name: "Nitrogen Hammer", tier: "S", why: "The specialist guide's top endpoint: it stabilizes quickly, scales, and caps extremely high with even modest Freeze support." },
+      { name: "Ice 9000", tier: "S", why: "Shares most Hammer support, adds control, and is a strong first-hit pivot when it appears before Hammer." },
+      { name: "Launch Pad", tier: "S", why: "A win condition available earlier than other endpoints; Flying and Friend activations create dense Burn output." },
+      { name: "Fiber Optics", tier: "S", why: "Accelerates the carry at the opposite edge and helps reach the loop breakpoint with fewer low-value triggers." },
+      { name: "Party Float", tier: "A", why: "Provides Flying-based Shield and cooldown reduction while supporting nearly every midgame Launcher line." },
+      { name: "Cooling Fan", tier: "A", why: "Critical Hammer startup tool and a premium Freeze enabler for the two best control endpoints." },
+      { name: "Thrusters", tier: "A", why: "Starts the chosen adjacent item Flying, supplies cooldown reduction, and unlocks the Saddle Multicast package." },
+      { name: "Dino Saddle", tier: "A", why: "One of the highest ceilings because it Multicasts a selected Vehicle, but Diamond rarity means it is a cap—not a plan." },
+      { name: "Terry-Dactyl", tier: "B", why: "Strong early stabilizer and viable endpoint with Mainframe/Fiber support, but needs Diamond quality to stay late." },
+      { name: "Propeller Hat", tier: "B", why: "Efficient midgame coverage and double-Core support; replace it when the board loops without the slot." },
+    ],
+    synergies: [
+      { name: "Nitrogen Hammer freeze loop", grade: "S", items: ["Nitrogen Hammer", "Cooling Fan", "Fiber Optics", "Party Float"], plan: "Use Cooling Fan and one or two Freeze sources to start Hammer scaling, then let Fiber and Launcher compress every later cast.", online: "Hammer is upgraded, receives repeatable Freeze triggers, and survives long enough to reach its second major hit.", breaks: "If no Freeze arrives or the first Hammer cast is too late, use the shell with Ice 9000 or another immediate stabilizer." },
+      { name: "Ice 9000 control loop", grade: "S", items: ["Ice 9000", "Beta Ray", "Fiber Optics", "Party Float"], plan: "Repeated Freeze buys the time the Flying loop needs while Ice 9000 supplies the damage endpoint.", online: "Important pieces are Flying, Freeze interrupts the opponent's first cycle, and Ice 9000 is at least Gold quality.", breaks: "A low-tier, unenchanted Ice 9000 is weaker than Hammer when both appear together." },
+      { name: "Launch Pad flight Burn", grade: "S", items: ["Launch Pad", "Omega Ray", "YLW-M4NT1S", "BLK-SP1D3R"], plan: "Every relevant Friend or Flying activation adds Burn; use Party Float or a defensive enchant to survive while it compounds.", online: "Launch Pad has meaningful base Burn and the board produces frequent Friend/Flying uses without excess filler.", breaks: "Without Burn scaling, treat this as tempo and be ready to transfer the flight engine to Hammer, Ice 9000, or Plasma Rifle." },
+      { name: "Terry/Mainframe", grade: "A", items: ["Terry-Dactyl", "Dooltron Mainframe", "Fiber Optics", "Thrusters"], plan: "A compact Friend/Flying package makes Terry activate repeatedly while Mainframe improves the whole loop.", online: "Terry is upgraded and the board needs only a few active pieces to become fully Flying.", breaks: "If Terry cannot reach Diamond or requires too many small Friends, pivot to the first S-tier endpoint found." },
+    ],
+    matchup: { favored: "Long fights and control boards once the loop is online.", respect: "Early aggression, first-cycle burst, and anything that kills before Flying coverage resolves.", adapt: "Spend early gold only for real tempo, enter Day 6 with reserves, then buy the first credible endpoint instead of holding out for a perfect one." },
+  },
+  "armored-core": {
+    northStar: "Generate enough repeatable Shield to buy time, then convert that Shield into Burn, damage, or one decisive Force Field hit.",
+    bottleneck: "Pure Shield does not end combat, and Poison can invalidate the resource you are investing in.",
+    firstBreakpoint: "Duct Tape plus a real damage source; the current premium breakpoint is Welding Torch with Lightbulb/Wallace support.",
+    exitRule: "Drop Armored when a self-contained carry supplies its own survival or the lobby's damage bypasses Shield faster than you can convert it.",
+    itemRanks: [
+      { name: "Duct Tape", tier: "S", why: "Foundational proc engine that multiplies Core Shield and supplies the repeated Shield events most Armored payoffs require." },
+      { name: "Welding Torch", tier: "S", why: "Current Season 16 endpoint that converts Shield into Burn and gives the defensive shell inevitability." },
+      { name: "Lightbulb", tier: "S", why: "Compact Tech accelerator in the featured Torch package; use it to charge the relevant adjacent Tech target." },
+      { name: "Bunker", tier: "S", why: "Multicasts Shield items and reduces incoming damage, enabling Torch, Force Field, Harmadillo, and loop finishes." },
+      { name: "Wallace", tier: "A", why: "Fast Shield scaler in the current Torch shell; Patch 16.1 removed cooldown-based scaling, so CDR is no longer the reason to buy it." },
+      { name: "Force Field", tier: "A", why: "Converts a large Shield bank into burst and can reverse otherwise poor Shield-bypass matchups when properly accelerated." },
+      { name: "Harmadillo", tier: "A", why: "Reliable damage conversion from repeatable Shield events and an excellent bridge from early Duct Tape." },
+      { name: "Fiber Optics", tier: "A", why: "Charges Force Field or a right-edge payoff before opponents remove the Shield it needs." },
+      { name: "Mech-Moles", tier: "B", why: "Excellent early tempo because both Haste and Shield matter, but it needs a scaling plan to remain the carry." },
+      { name: "Metronome", tier: "B", why: "Strong when it connects a fast item to Core or Force Field; less important once Bunker/Fiber already closes the cycle." },
+    ],
+    synergies: [
+      { name: "Welding Torch conversion", grade: "S", items: ["Welding Torch", "Duct Tape", "Wallace", "Bunker"], plan: "Tape and Wallace create repeated Shield, Torch converts a share into Burn, and Bunker multiplies the Shield-tagged actions.", online: "Torch is applying enough Burn to outpace decay and the board still has room for startup or control.", breaks: "Do not describe Wallace as scaling from cooldown after 16.1; if Poison dominates, shorten the fight instead of buying more Shield." },
+      { name: "Harmadillo cycle", grade: "A", items: ["Duct Tape", "Harmadillo", "Fiber Optics", "Bunker"], plan: "Fast adjacent activations proc Tape, Shield events fire Harmadillo, and Fiber/Bunker push the package toward a repeatable loop.", online: "Harmadillo is upgraded and every Core cycle generates several distinct Shield events.", breaks: "If Harmadillo is the only damage and has no scaling, transition to Torch, Force Field, or a premium carry." },
+      { name: "Force Field cash-out", grade: "A", items: ["Force Field", "Fiber Optics", "Metronome", "Bunker"], plan: "Bank Shield, then charge and Multicast Force Field before the opponent can remove the resource it converts.", online: "Force Field is Hasted or charged, has meaningful Crit, and threatens a kill on its first or second cast.", breaks: "Do not hedge it from a weak position without Defense Grid or enough Shield generation." },
+      { name: "Mech-Moles tempo", grade: "B", items: ["Mech-Moles", "two small hasters", "Armored Core", "fast weapons"], plan: "Use Moles as an early scaler while Armored buys time, then shop a Gold carry before Moles falls behind.", online: "Both sides of Moles receive useful Haste and the rest of the board contributes immediate damage.", breaks: "Treat it as a bridge unless scaling or a late loop appears." },
+    ],
+    matchup: { favored: "Weapon burst and slower damage plans that must chew through repeated Shield.", respect: "Poison, Shield removal, and opponents whose scaling overtakes your conversion rate.", adapt: "Against bypass damage, add a faster payoff or Force Field line; generic extra Shield is not a correction." },
+  },
+  "companion-core": {
+    northStar: "Use cheap Friend tempo and economy to reach a real Gold-tier endpoint before the generic Friend board falls off.",
+    bottleneck: "Friend density is not power. Weak Friends consume slots and Companion's early advantage declines every day.",
+    firstBreakpoint: "Brick Buddy or a credible Friend carry early; DJ Circuit Breaker or Miss Isles in the midgame; a real endpoint by Days 6–9.",
+    exitRule: "Remove weak Friends and even bench Companion when DJ or a complete Dooltron/Factory engine gives more useful Haste and triggers.",
+    itemRanks: [
+      { name: "Robotic Factory", tier: "S", why: "Universal late Friend engine that enables multiple endpoints and becomes exceptional with a useful enchant." },
+      { name: "Miss Isles", tier: "S", why: "Multicast Friend that charges Companion twice, supplies immediate pressure, and can become the win condition when upgraded." },
+      { name: "Dooltron", tier: "S", why: "Natural late handoff because the Friend shell already provides tags and repeated triggers; upgrade quality is critical." },
+      { name: "DJ Circuit Breaker", tier: "S", why: "The strongest early-to-mid global Haste engine for Friends, though mature boards may return to Companion for faster startup." },
+      { name: "Monitor Lizard", tier: "A", why: "At Gold/Diamond it can be startup, Fiber fuel, or a real scaler rather than a filler Friend." },
+      { name: "Launch Pad", tier: "A", why: "Converts Friend/Flying frequency into Burn and pairs extremely well with Blazehowl or Toxic Flames." },
+      { name: "Pierre Conditioner", tier: "A", why: "High-tier multi-target Freeze turns small bug engines into late control boards." },
+      { name: "Temporal Navigator", tier: "A", why: "Economic bridge and alternate-item access that supports Companion's save-then-spike game plan." },
+      { name: "Brick Buddy", tier: "B", why: "Excellent early protection and upgrade target, but usually leaves the final board." },
+      { name: "Sat-Comm", tier: "B", why: "Strong economy while the cheap Friend board is winning; not a final-board slot." },
+    ],
+    synergies: [
+      { name: "Dooltron Friend handoff", grade: "S", items: ["Dooltron", "Companion Core", "2–3 useful Friends", "support item"], plan: "Use the early Friend board to bank gold, then keep only Friends whose triggers materially accelerate Dooltron.", online: "Dooltron is upgraded before Day 10 and status/Friend triggers make it fire without preserving dead tags.", breaks: "DJ can be too slow in mature boards; compare its startup against Companion rather than keeping both automatically." },
+      { name: "Factory control swarm", grade: "S", items: ["Robotic Factory", "Pierre Conditioner", "small bugs", "Haste engine"], plan: "Factory and a compact bug package repeatedly trigger Pierre so the board wins through control while any one Friend supplies damage.", online: "Pierre freezes multiple targets and the engine starts before the opponent's first major cycle.", breaks: "Do not add bugs whose only contribution is the Friend tag; every slot must add triggers, control, or scaling." },
+      { name: "Launch Pad Burn", grade: "A", items: ["Launch Pad", "Blazehowl", "Toxic Flames", "defensive enchant"], plan: "Friend activations stack Burn while the defensive layer buys enough time for damage-over-time to resolve.", online: "Launch Pad has meaningful base Burn and the board already generates frequent Friend uses.", breaks: "Without scaling, this is midgame tempo; move into Dooltron, Factory, or another endpoint before late sustain wins." },
+      { name: "Crane vehicle package", grade: "A", items: ["Crane", "medium Friend Vehicle", "Dino Saddle", "Temporal Navigator"], plan: "Use Saddle/Vehicle support or Race Carl plus Navigator to turn Crane into the focused carry.", online: "Crane is upgraded and the supporting Vehicle package improves both its timing and damage.", breaks: "Dino Saddle is Diamond-only; do not hold a weak Crane board while waiting for one exact cap piece." },
+    ],
+    matchup: { favored: "Early aggression when Brick Buddy and efficient Friends win while preserving gold.", respect: "Late scaling, mass disruption, and any lobby that forces the generic Friend board beyond Day 12.", adapt: "Set a Day 6–9 endpoint deadline. If no win condition appears, pivot through Launcher or Armored hedges rather than buying more Friends." },
+  },
+  "critical-core": {
+    northStar: "Burst before opposing scaling begins, then convert reliable Crit into a loop or a self-scaling Gold carry.",
+    bottleneck: "Crit multiplies base output but does not create it. Low-damage items with 100% Crit are still low-damage items.",
+    firstBreakpoint: "A real weapon opener plus Memory Card/Super Syrup; the actual carry should approach 100% Crit by the late game.",
+    exitRule: "If no scalable damage source appears by Day 6, move the Crit support onto Combat Core, Cybersecurity, Hammer, or another Gold endpoint.",
+    itemRanks: [
+      { name: "Memory Card", tier: "S", why: "Farmable Crit source that solves the Core's most important late consistency requirement when planned before PvE fights." },
+      { name: "SMG", tier: "S", why: "Fast activator that helps cycle Critical before the larger right-side weapons fire." },
+      { name: "Pulse Rifle", tier: "S", why: "Efficient early buff target and the cleanest default weapon for the Core's right side." },
+      { name: "Fiber Optics", tier: "S", why: "Closes Core/carry loops and enables double-Core or Hammer finishes." },
+      { name: "Metronome", tier: "A", why: "Exceptional with Mech-Moles and useful whenever a fast item must accelerate Core or the chosen carry." },
+      { name: "Combat Core", tier: "A", why: "Reliable self-scaling fallback that uses GPU, Fiber, and Core skills better than an underpowered weapon pile." },
+      { name: "Nitrogen Hammer", tier: "A", why: "Stabilizes with minimal Freeze and caps with Cooling Fan plus Fiber." },
+      { name: "Cybersecurity", tier: "A", why: "Straightforward high-base-damage alternative when Crit is solved but the original carry is not." },
+      { name: "Mech-Moles", tier: "B", why: "Real scaling with Metronome/Haste, but not enough alone without late loop support." },
+      { name: "Weakpoint Detector", tier: "B", why: "Useful early-mid scaler for slow weapon boards; rarely survives the final compression." },
+    ],
+    synergies: [
+      { name: "Two-rotation weapon burst", grade: "S", items: ["SMG", "Critical Core", "Pulse Rifle", "Crit source"], plan: "Put fast, low-output activators left and meaningful damage right so the first two rotations happen before opposing scaling.", online: "The primary weapon receives the Core effect before firing and has reliable Crit rather than overcap on filler." , breaks: "If the line needs a third or fourth cycle without scaling, transition to a Gold carry." },
+      { name: "Mech-Moles Metronome", grade: "A", items: ["Mech-Moles", "Metronome", "SMG", "Critical Core"], plan: "Place Metronome between the fastest trigger and the current scaling target; later move it toward Core as Core activations become more frequent.", online: "Moles scales every important damage source and the board remains fast enough to capitalize before disruption lands.", breaks: "Without Metronome or another dense Haste source, Moles is a hedge—not a late plan." },
+      { name: "Double-Core Fiber loop", grade: "A", items: ["Critical Core", "Combat Core", "GPU", "Fiber Optics"], plan: "Critical sits far left and Combat Core far right so edge charging, GPU Haste, and Core skills reinforce both engines.", online: "Both Cores are upgraded and at least one reliable Multicast source lets the loop repeat inside the fight window.", breaks: "Do not assemble this from low tiers while behind; a conventional single carry is cheaper and faster." },
+      { name: "Nitrogen Hammer freeze", grade: "A", items: ["Nitrogen Hammer", "Cooling Fan", "Fiber Optics", "Freeze source"], plan: "Use Critical's multiplier for immediate Hammer threat while Freeze and Fiber create repeat casts.", online: "Hammer is upgraded, receives at least one early Freeze, and threatens a kill by cast two.", breaks: "If Hammer is late or unupgraded, Cybersecurity or Combat Core may stabilize sooner." },
+    ],
+    matchup: { favored: "Slow engines and fragile boards that die inside two rotations.", respect: "Heavy Shield, damage reduction, and Freeze that interrupts the carry before the burst lands.", adapt: "Add scaling or a self-scaling endpoint; buying more Crit after consistency is solved does not fix low base damage." },
+  },
+  "ignition-core": {
+    northStar: "Front-load enough Burn to overcome decay, then maintain it while defense and control buy the required fight time.",
+    bottleneck: "Burn loses one stack every half-second and deals half damage to Shield, so slow application and no survival both fail.",
+    firstBreakpoint: "Roughly 2 Burn per second only offsets decay; real boards need a higher initial burst plus Blast Doors or another survival layer.",
+    exitRule: "Replace early Burn filler on Day 6, and abandon Burn late when sustain or immediate-kill boards outpace even your controlled stack.",
+    itemRanks: [
+      { name: "Blast Doors", tier: "S", why: "The premier early survival piece; it often buys enough effective health for Burn to matter through Day 5." },
+      { name: "Soldering Gun", tier: "S", why: "Multicast applies Core buffs efficiently and supplies repeated status triggers for Drill variants." },
+      { name: "Plasma Grenade", tier: "S", why: "Applied immediately before Rocket Launcher, it minimizes decay and creates the opening Burn burst." },
+      { name: "Rocket Launcher", tier: "S", why: "Primary early Burn carry that converts skill and flat-Burn bonuses into reliable Days 1–5 pressure." },
+      { name: "Metronome", tier: "A", why: "Solves Ignition's slow baseline and increases both initial application speed and later maintenance." },
+      { name: "Launch Pad", tier: "A", why: "Premium Day 6 upgrade when Friends/Flying items can turn every engine activation into Burn." },
+      { name: "Solar Farm", tier: "A", why: "Strong Haste/Burn package that bridges into looping late boards." },
+      { name: "Fiber Optics", tier: "A", why: "Charges the chosen endpoint and is essential to several deep late control or one-shot pivots." },
+      { name: "Chronobarrier", tier: "B", why: "Hold for the premium Atomic Clock control finish; too slow and expensive as an unsupported midgame purchase." },
+      { name: "Cool LEDs", tier: "B", why: "Cheap control and status density that buys Burn ticks and supports Drill/RAMPage variants." },
+    ],
+    synergies: [
+      { name: "Plasma-to-Rocket cycle", grade: "S", items: ["Plasma Grenade", "Rocket Launcher", "Ignition Core", "Haste"], plan: "Sequence Plasma immediately before Rocket so a large Burn packet lands with minimal decay, then use Haste to reach the maintenance cycle.", online: "The first cycle applies enough Burn to keep stacking through Shield and the board survives until the second cycle.", breaks: "If output is sufficient but late, buy speed; if it starts fast but dies, buy survival—not another redundant burner." },
+      { name: "Soldering Drill", grade: "A", items: ["Soldering Gun", "Power Drill", "Ignition Core", "status support"], plan: "Soldering's Multicast and other status procs charge Drill while Ignition supplies repeated Burn triggers.", online: "Drill has real base damage or RAMPage scaling and Soldering contributes more than its own Burn." , breaks: "Only use Drill on a high-damage board; unsupported Drill consumes a large slot without fixing Burn's kill time." },
+      { name: "Solar Launch Pad", grade: "A", items: ["Solar Farm", "Launch Pad", "YLW-M4NT1S", "Firefly"], plan: "Farm/Haste support accelerates a dense Friend/Flying Burn engine and provides a clean Day 6 replacement for early filler.", online: "Launch Pad has usable base Burn and multiple fast Friend/Flying activations are already present.", breaks: "If no scaling or defensive enchant appears, use it for tempo and prepare the Chronobarrier or one-shot pivot." },
+      { name: "Chronobarrier control finish", grade: "S", items: ["Chronobarrier", "Atomic Clock", "Fiber Optics", "Tech density"], plan: "Build a high-ammo Atomic Clock and Diamond Chronobarrier package so extreme control gives Ignition or another payoff time to finish.", online: "Atomic Clock has enough Ammo, Fiber targets the correct edge, and the control begins before the opponent's lethal cycle.", breaks: "This is a held late package, not an early force. If pieces miss, use Boulder or Soul of the District for a faster kill." },
+    ],
+    matchup: { favored: "Boards that cannot remove the first Burn stack and need multiple cycles to become lethal.", respect: "Shield-heavy opponents, strong healing, and one-shot lines that deny Burn time.", adapt: "Against Shield, front-load harder or add Drill; against sustain, transition to control or a one-shot rather than stacking more slow Burn." },
+  },
+  "primal-core": {
+    northStar: "Exploit Flint/Tool tempo and Core adjacency to win cheaply, bank gold, then purchase a denser late carry.",
+    bottleneck: "Early Tools age poorly and the Core's own hit is not a late win condition.",
+    firstBreakpoint: "Silver Flint with several Tools; practical early upgrade order is Flint, Drill, Plasma Grenade, Sander, then SMG.",
+    exitRule: "Drop Primal when Dooltron, Press, Flamethrower, or another premium carry produces more value from the saved economy and remaining support.",
+    itemRanks: [
+      { name: "Flint Stones", tier: "S", why: "The reason to take Primal: one Small item converts Tool density into dominant early Burn and cheap wins." },
+      { name: "Power Drill", tier: "S", why: "Adds burst, breaks Shield, and preserves a strong coreless/status pivot if Primal is missed or later removed." },
+      { name: "Power Sander", tier: "S", why: "Accelerates Flint and generates multiple Drill triggers while remaining useful through the transition." },
+      { name: "Soldering Gun", tier: "S", why: "Provides Drill triggers, benefits from Burn bonuses, and offers a separate Ignition/coreless route." },
+      { name: "Plasma Grenade", tier: "A", why: "Adds disruption, improves the second Flint rotation, and supplies status density for Drill." },
+      { name: "Temporal Navigator", tier: "A", why: "Pays for itself quickly and exposes alternate premium outs while the early board preserves economy." },
+      { name: "Dooltron", tier: "A", why: "Natural handoff because Grenade and Sander already enable its status engine; usually replaces the Core." },
+      { name: "Flamethrower", tier: "A", why: "Premium dense carry that inherits Burn and Haste support after the small Tool pile stops winning." },
+      { name: "SMG", tier: "B", why: "Fast adjacent weapon and useful early trigger, but typically leaves once the board condenses." },
+      { name: "Hydraulic Press", tier: "B", why: "An early Press is a real transition signal only when it will soon one-shot; keep the Flint plan until then." },
+    ],
+    synergies: [
+      { name: "Flint Tool tempo", grade: "S", items: ["Flint Stones", "Power Drill", "Power Sander", "Soldering Gun"], plan: "Use cheap Tool density to accelerate Flint and trigger Drill while Primal's adjacency turns the two best neighboring items into Relics.", online: "Flint is Silver, several Tools are active, and the board is winning without repeated shop spending.", breaks: "Do not keep every Bronze Tool after Day 6; retain only pieces that accelerate the selected late carry." },
+      { name: "Grenade Drill burst", grade: "A", items: ["Plasma Grenade", "Power Drill", "Flint Stones", "Power Sander"], plan: "Grenade front-loads disruption and status, Sander speeds the cycle, and Drill supplies direct Shield-breaking damage.", online: "Grenade fires early, Drill receives several status charges, and Flint still supplies meaningful Burn.", breaks: "If Drill lacks scaling or Grenade is late, the board is spending four slots on disconnected medium output." },
+      { name: "Dooltron conversion", grade: "A", items: ["Dooltron", "Plasma Grenade", "Power Sander", "compact triggers"], plan: "Transfer the status/tempo shell into Dooltron, then solve speed, Crit, and Multicast instead of preserving Primal tags.", online: "Dooltron is upgraded and the support items trigger several of its internal effects.", breaks: "Dooltron normally drops Primal quickly; keeping the Core for sentiment reduces the trigger count." },
+      { name: "Press or Flamethrower handoff", grade: "A", items: ["Hydraulic Press or Flamethrower", "Haste", "damage scaling", "control"], plan: "Use the strong economy to buy one premium payoff, then retain only Sander, Crit, or control that improves that carry's first two casts.", online: "The new carry is upgraded and objectively outperforms the full Flint/Tool board.", breaks: "A Gold premium item is not automatically an upgrade if it cannot yet kill; keep the tempo shell one fight longer." },
+    ],
+    matchup: { favored: "Early boards that cannot answer fast Flint Burn and Tool-trigger density.", respect: "Late control, high sustain, and any opponent that survives while the Tool pile runs out of scaling.", adapt: "Use the health/gold lead to take premium-item nodes. The correct defense is a timely transition, not upgrading filler." },
+  },
+  "weaponized-core": {
+    northStar: "Make Weaponized activate before one or two efficient right-side weapons, then compound flat scaling across repeat volleys.",
+    bottleneck: "Wide weapon piles dilute upgrades and still lose late without Crit, Haste, or control.",
+    firstBreakpoint: "SMG left of Core plus Pulse Rifle or Arc Blaster right; Core must apply its first buff before the carry fires.",
+    exitRule: "Late, keep only weapons efficient enough to justify receiving Core buffs; remove sidearms for Crit, CDR, defense, or control.",
+    itemRanks: [
+      { name: "SMG", tier: "S", why: "The key early timing item: it synchronizes Weaponized so the Core can buff a 5-second carry before its first cast." },
+      { name: "Pulse Rifle", tier: "S", why: "The most efficient early recipient of Weaponized scaling and an automatic right-side consideration." },
+      { name: "Scrap Metal", tier: "S", why: "Permanent targeted cooldown reduction and a later upgrade; Diamond Core is a major Weaponized breakpoint." },
+      { name: "Metronome", tier: "S", why: "Fixes first-cycle timing and keeps the Core or premium weapon Hasted in condensed late boards." },
+      { name: "Arc Blaster", tier: "A", why: "Excellent Tech weapon in the Pulse/Motherboard package and efficient enough to retain through midgame." },
+      { name: "Motherboard", tier: "A", why: "Pulse/Core/Arc triggers charge it frequently so two important Tech pieces remain Hasted." },
+      { name: "Flamethrower", tier: "A", why: "Dense midgame weapon that absorbs scaling well, provided Cog or Levitation Pad keeps it Hasted." },
+      { name: "Cool LEDs", tier: "A", why: "Compact Slow and Core-linked utility that adds status pressure without another weak gun." },
+      { name: "Combat Core", tier: "B", why: "A powerful extra scaler for the midgame hump, but requires Haste and competes for premium board space." },
+      { name: "Cybersecurity", tier: "B", why: "High upfront damage and a useful multiplier when the original weapon pile lacks a true carry." },
+    ],
+    synergies: [
+      { name: "SMG Core Pulse", grade: "S", items: ["SMG", "Weaponized Core", "Pulse Rifle", "Crit source"], plan: "SMG charges Core before Pulse fires; every later cycle compounds Weaponized scaling onto the efficient right-side weapon.", online: "Core's first activation precedes Pulse and the carry has enough Haste/Crit to exploit later buffs.", breaks: "A third weak weapon is usually worse than control or defense once Pulse is upgraded." },
+      { name: "Pulse Motherboard Arc", grade: "S", items: ["Pulse Rifle", "Motherboard", "Arc Blaster", "Weaponized Core"], plan: "A dense Tech package repeatedly charges Motherboard so the two most important Tech pieces stay Hasted while Core scales the weapons.", online: "Motherboard receives frequent Tech activations and both weapons are meaningful upgrade targets.", breaks: "If Arc or Pulse is low tier, keep the Tech engine and replace the weaker weapon with a premium carry." },
+      { name: "Hasted Flamethrower", grade: "A", items: ["Flamethrower", "Cog or Levitation Pad", "Weaponized Core", "Crit"], plan: "Condense the wide weapon pile into Flamethrower, then make sure it reaches a second cast while Core scaling and Crit multiply the damage.", online: "Flamethrower is permanently or nearly permanently Hasted and Core acts first.", breaks: "An unhasted Flamethrower often casts only once; fix timing before buying more damage." },
+      { name: "Gold scaler bridge", grade: "A", items: ["Combat Core or Cybersecurity", "Haste", "Fiber Optics", "utility"], plan: "Use a self-scaling Gold item to cross Weaponized's midgame gap, then replace early sidearms with speed and disruption.", online: "The Gold carry is upgraded and can threaten lethal within two cycles.", breaks: "Do not run multiple large scalers without enough acceleration; pick the one with the best current quality." },
+    ],
+    matchup: { favored: "Predictable early and midgame boards that allow the first Core-then-weapon sequence.", respect: "Freeze on the primary weapon, damage reduction, and late engines that outscale flat weapon buffs.", adapt: "Add Crit and control, then condense to one premium weapon. If the first shot still precedes Core, change timing before shopping damage." },
+  },
+};
+
+export const topDooleyItems: GlobalRankedItem[] = [
+  { name: "Fiber Optics", tier: "S", role: "Targeted Charge", bestIn: "Almost every carry route", why: "The fastest left-edge activation can charge the right-edge carry. It appears in Drill, Launcher, Force Field, Harmadillo, and Dooltron finishes." },
+  { name: "Metronome", tier: "S", role: "Haste bridge", bestIn: "All Cores", why: "Place it between a fast active and the Core or carry. It fixes first-cycle timing and remains useful until a tighter loop replaces it." },
+  { name: "Scrap Metal", tier: "S", role: "Permanent CDR + upgrade", bestIn: "Late Core routes", why: "Premium long-run investment when immediate tempo is already solved. Targeting and timing matter more than buying it on sight." },
+  { name: "RAMPage Module", tier: "S", role: "Status scaler", bestIn: "Power Drill / status", why: "Slow, Poison, or Freeze turns adjacent items into scaling threats. It is the defining support for the current Drill shell." },
+  { name: "Power Drill", tier: "S", role: "Status payoff", bestIn: "RAMPage, Ignition, coreless", why: "Haste, Slow, Freeze, Poison, and Burn all accelerate it. Unsupported Drill is slow; supported Drill is a featured Season 16 win condition." },
+  { name: "Duct Tape", tier: "S", role: "Shield engine", bestIn: "Armored, Harmadillo, Torch", why: "Cheap defense that becomes a repeated Shield-proc engine beside fast items and effectively multiplies Armored's output." },
+  { name: "Cool LEDs", tier: "A", role: "Slow + status trigger", bestIn: "Core, Drill, RAMPage", why: "Compact, fast disruption that also feeds status payoffs. Excellent engine piece; never mistake it for the win condition." },
+  { name: "Bunker", tier: "A", role: "Multicast + defense", bestIn: "Shield and Dooltron finishes", why: "Multicasts Shield items and reduces incoming damage. High ceiling, but its Large slot demands real Shield density or an enchant target." },
+  { name: "Party Float", tier: "A", role: "Flying defense + CDR", bestIn: "Launcher", why: "Starts Flying, Shields on Flying activations, and reduces Flying cooldowns. Premium once a Launcher endpoint is already live." },
+  { name: "Lightbulb", tier: "A", role: "Adjacent Tech charge", bestIn: "Welding Torch / Tech", why: "Compact accelerator in the current Shield/Burn package. Its target must be Tech, so map the adjacency before buying." },
+  { name: "Dooltron", tier: "A", role: "Late status finisher", bestIn: "Companion, Primal, coreless", why: "Converts a mature status/Friend shell into a dense late payoff. Once triggers are saturated, buy CDR or Multicast instead of more tags." },
+  { name: "Dino Saddle", tier: "A", role: "Vehicle Multicast", bestIn: "Launcher, Dooltron, Force Field", why: "One of Dooley's best caps when Thrusters makes the chosen carry a Vehicle. Diamond rarity makes it an opportunity, not a force." },
+  { name: "Thrusters", tier: "A", role: "Vehicle + Flying + CDR", bestIn: "Saddle and Launcher", why: "Selects the item that Saddle will Multicast while improving startup. Hold only when the package is realistically reachable." },
+  { name: "Chemsnail", tier: "B", role: "Slow/Poison engine", bestIn: "RAMPage / Drill", why: "Two statuses in one compact Friend and a natural RAMPage trigger source. Needs repeatable Slow before it becomes exceptional." },
+  { name: "BLK-SP1D3R", tier: "B", role: "Multi-target Slow", bestIn: "Drill, Ignition, Dooltron", why: "Dense Slow that charges from adjacent Poison or Burn. Upgrade and adjacency dependent, but excellent in the correct status package." },
+  { name: "Launch Pad", tier: "B", role: "Friend/Flying Burn", bestIn: "Launcher, Companion, Ignition", why: "Every relevant Friend or Flying use produces Burn. S-tier inside its route; a dead speculative buy outside it." },
+  { name: "Dooley's Scarf", tier: "B", role: "Freeze protection + Haste", bestIn: "Drill and Freeze", why: "Protects adjacent pieces from Freeze and converts your Freeze events into Haste. Premium only when Freeze is frequent." },
+  { name: "Beta Ray", tier: "B", role: "Repeatable Freeze", bestIn: "Launcher and fast Cores", why: "Patch 16 cooldown improvement made it a better generic support piece, but it still needs a real loop or Freeze payoff." },
+  { name: "Wallace", tier: "B", role: "Shield scaler", bestIn: "Welding Torch", why: "A current Shield/Burn winner at a flat 3-second cooldown. Patch 16.1 removed cooldown-based scaling, so do not overbuy CDR for it." },
+  { name: "Welding Torch", tier: "B", role: "Shield-to-Burn conversion", bestIn: "Armored Core", why: "Gives Shield boards inevitability by converting Shield into Burn. Build-defining in its exact shell, low priority without Shield." },
 ];
 
 export const merchantDirectory = [

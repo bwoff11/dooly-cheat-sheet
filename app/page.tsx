@@ -4,14 +4,19 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  coreDepthById,
   cores,
   merchantDirectory,
   patchInfo,
   sources,
+  topDooleyItems,
   universalRules,
   type BuildLine,
   type Confidence,
   type CoreGuide,
+  type ItemTier,
+  type RankedItem,
+  type SynergyPackage,
 } from "./content";
 
 const repoUrl = "https://github.com/bwoff11/dooly-cheat-sheet";
@@ -56,6 +61,72 @@ function BulletList({ items, tone = "plain" }: { items: string[]; tone?: "plain"
       ))}
     </ul>
   );
+}
+
+const tierMeta: Record<ItemTier, { label: string; description: string }> = {
+  S: { label: "Build-defining", description: "Buy when the listed route is supported" },
+  A: { label: "High-value support", description: "Strong after the engine or payoff exists" },
+  B: { label: "Package-dependent", description: "Useful only when its condition is already live" },
+};
+
+function ItemTierBoard({ items }: { items: RankedItem[] }) {
+  return (
+    <div className="item-tier-board">
+      {(["S", "A", "B"] as ItemTier[]).map((tier) => {
+        const tierItems = items.filter((item) => item.tier === tier);
+        return (
+          <article className={`item-tier-lane item-tier-${tier.toLowerCase()}`} key={tier}>
+            <header>
+              <span className="tier-letter">{tier}</span>
+              <div><h3>{tierMeta[tier].label}</h3><p>{tierMeta[tier].description}</p></div>
+              <b>{tierItems.length.toString().padStart(2, "0")}</b>
+            </header>
+            <div className="tier-item-list">
+              {tierItems.map((item, index) => (
+                <div className="tier-item" key={item.name}>
+                  <span>{(index + 1).toString().padStart(2, "0")}</span>
+                  <div><h4>{item.name}</h4><p>{item.why}</p></div>
+                </div>
+              ))}
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
+function SynergyCard({ synergy, index }: { synergy: SynergyPackage; index: number }) {
+  return (
+    <article className={`synergy-card synergy-grade-${synergy.grade.toLowerCase()}`}>
+      <div className="synergy-topline"><span>PACKAGE {(index + 1).toString().padStart(2, "0")}</span><b>{synergy.grade}</b></div>
+      <h3>{synergy.name}</h3>
+      <div className="synergy-chain" aria-label={`${synergy.name} item package`}>
+        {synergy.items.map((item, itemIndex) => (
+          <span key={item}>{itemIndex > 0 ? <i aria-hidden="true">+</i> : null}<b>{item}</b></span>
+        ))}
+      </div>
+      <p className="synergy-plan">{synergy.plan}</p>
+      <dl className="synergy-checks">
+        <div><dt>Online when</dt><dd>{synergy.online}</dd></div>
+        <div><dt>Abandon / adjust</dt><dd>{synergy.breaks}</dd></div>
+      </dl>
+    </article>
+  );
+}
+
+function rerollTone(reroll: string) {
+  if (reroll.startsWith("2g")) return "reroll-low";
+  if (reroll.startsWith("3g")) return "reroll-mid";
+  if (reroll.startsWith("4g") || reroll === "Premium") return "reroll-high";
+  return "reroll-special";
+}
+
+function merchantCategory(name: string) {
+  if (["Ande", "Mittel", "Pol / Quixel"].includes(name)) return "size";
+  if (["Aila", "Hef", "Aimbot"].includes(name)) return "damage";
+  if (["Kina", "Kev’s Armory"].includes(name)) return "defense";
+  return "engine";
 }
 
 function BoardMap({ core }: { core: CoreGuide }) {
@@ -103,11 +174,11 @@ function BuildCard({ build, index }: { build: BuildLine; index: number }) {
           <dd>{build.engine}</dd>
         </div>
       </dl>
-      <div className="chip-group">
+      <div className="chip-group chip-group-required">
         <p>Non-negotiables</p>
         <div>{build.mustHave.map((item) => <span className="item-chip item-chip-must" key={item}>{item}</span>)}</div>
       </div>
-      <div className="chip-group">
+      <div className="chip-group chip-group-flex">
         <p>Flex slots</p>
         <div>{build.flex.map((item) => <span className="item-chip" key={item}>{item}</span>)}</div>
       </div>
@@ -146,7 +217,8 @@ function Header({ core }: { core: CoreGuide }) {
       </button>
       <nav className={menuOpen ? "nav-open" : ""} aria-label="Primary navigation" onClick={() => setMenuOpen(false)}>
         <a href="#core-picker">Cores</a>
-        <a href="#builds">Build lines</a>
+        <a href="#item-tiers">Item tiers</a>
+        <a href="#synergies">Synergies</a>
         <a href="#merchants">Merchants</a>
         <a href="#patch-notes">Patch notes</a>
         <a href="#sources">Sources</a>
@@ -173,6 +245,7 @@ export default function Home() {
   }, []);
 
   const selected = cores.find((core) => core.id === selectedId) ?? cores[0];
+  const depth = coreDepthById[selected.id] ?? coreDepthById["the-core"];
   const filteredCores = useMemo(() => {
     const query = filter.trim().toLowerCase();
     if (!query) return cores;
@@ -216,7 +289,7 @@ export default function Home() {
               <p className="eyebrow">PATCH 16.1 STRATEGY REFERENCE</p>
               <h1>Dooley Core<br /><em>Strategy Reference</em></h1>
               <p className="hero-lede">
-                Select a Core to view current mechanics, recommended build archetypes, activation order, purchase priorities, merchant targets, and pivot conditions.
+                Select a Core for a professional Patch 16.1 guide: ranked items, proven synergy packages, build archetypes, activation order, matchup context, merchant targets, and pivot conditions.
               </p>
               <div className="hero-actions">
                 <a className="button button-primary" href="#core-picker">Select Core <span>↓</span></a>
@@ -229,8 +302,8 @@ export default function Home() {
               <div className="visual-status"><span>PATCH DATASET</span><b>16.1</b></div>
               <div className="visual-readout">
                 <p><span>CORE ROUTES</span><b>{cores.length.toString().padStart(2, "0")}</b></p>
-                <p><span>BUILD ARCHETYPES</span><b>{cores.reduce((sum, core) => sum + core.builds.length, 0)}</b></p>
-                <p><span>MERCHANT RANKINGS</span><b>{cores.reduce((sum, core) => sum + core.merchants.length, 0)}</b></p>
+                <p><span>SYNERGY PACKAGES</span><b>{Object.values(coreDepthById).reduce((sum, core) => sum + core.synergies.length, 0)}</b></p>
+                <p><span>RANKED ITEMS</span><b>{topDooleyItems.length}</b></p>
               </div>
               <div className="visual-rule"><span>SELECTION RULE</span><p>Choose a build only when your current items satisfy its entry criteria.</p></div>
             </div>
@@ -241,10 +314,10 @@ export default function Home() {
           <div className="shell run-strip-inner">
             <p><b>IN-RUN ORDER</b></p>
             <ol>
-              <li><span>1</span> Compare entry criteria</li>
-              <li><span>2</span> Select a supported build</li>
-              <li><span>3</span> Target ranked merchants</li>
-              <li><span>4</span> Reassess after Day 7</li>
+              <li><span>1</span> Select the supported Core</li>
+              <li><span>2</span> Check its item tiers</li>
+              <li><span>3</span> Confirm a synergy package</li>
+              <li><span>4</span> Route shops and pivots</li>
             </ol>
           </div>
         </section>
@@ -271,7 +344,7 @@ export default function Home() {
                 <div className="core-card-top"><CoreSignal core={core} /><span>{selected.id === core.id ? "SELECTED" : "VIEW"}</span></div>
                 <h3>{core.name}</h3>
                 <p>{core.role}</p>
-                <div className="core-tags"><span>{core.difficulty}</span><span>{core.tempo}</span></div>
+                <div className="core-tags"><span className="scan-chip" data-value={core.difficulty.toLowerCase()}>{core.difficulty}</span><span className="scan-chip" data-value={core.tempo.toLowerCase()}>{core.tempo}</span></div>
                 <div className="core-card-arrow">View strategy <b>↗</b></div>
               </button>
             ))}
@@ -295,7 +368,7 @@ export default function Home() {
               </div>
             </div>
             <nav className="guide-nav" aria-label={`${selected.name} sections`}>
-              <a href="#briefing">Overview</a><a href="#builds">Builds</a><a href="#priorities">Buy list</a><a href="#route-merchants">Merchants</a><a href="#timeline">Run phases</a>
+              <a href="#briefing">Overview</a><a href="#item-tiers">Item tiers</a><a href="#synergies">Synergies</a><a href="#builds">Builds</a><a href="#route-merchants">Merchants</a><a href="#timeline">Run phases</a>
             </nav>
 
             <div className="briefing-grid" id="briefing">
@@ -311,15 +384,37 @@ export default function Home() {
               </article>
             </div>
 
+            <div className="core-context-grid" aria-label={`${selected.name} decision summary`}>
+              <article><span>WIN CONDITION</span><p>{depth.northStar}</p></article>
+              <article><span>LIMITING FACTOR</span><p>{depth.bottleneck}</p></article>
+              <article><span>FIRST BREAKPOINT</span><p>{depth.firstBreakpoint}</p></article>
+              <article><span>CORE EXIT RULE</span><p>{depth.exitRule}</p></article>
+            </div>
+
             <BoardMap core={selected} />
 
+            <div className="subsection item-tier-section" id="item-tiers">
+              <SectionHeading eyebrow="03 // CORE ITEM TIERS" title={`Top items for ${selected.shortName}`} note="Tiers are relative to this Core, not raw card power. S means route-defining; B means the item needs a specific package or breakpoint." />
+              <ItemTierBoard items={depth.itemRanks} />
+            </div>
+
+            <div className="subsection synergy-section" id="synergies">
+              <SectionHeading eyebrow="04 // SYNERGY PACKAGES" title="What actually works together" note="Each package states why the interaction works, the condition that makes it operational, and the reason to abandon it." />
+              <div className="synergy-grid">{depth.synergies.map((synergy, index) => <SynergyCard synergy={synergy} index={index} key={synergy.name} />)}</div>
+              <div className="matchup-grid">
+                <article><span>FAVORED INTO</span><p>{depth.matchup.favored}</p></article>
+                <article><span>RESPECT</span><p>{depth.matchup.respect}</p></article>
+                <article><span>ADAPTATION</span><p>{depth.matchup.adapt}</p></article>
+              </div>
+            </div>
+
             <div className="subsection" id="builds">
-              <SectionHeading eyebrow="03 // BUILD ARCHETYPES" title="Recommended build archetypes" note="Ordered by general applicability rather than absolute power. Use the build whose entry requirements match your current items." />
+              <SectionHeading eyebrow="05 // BUILD ARCHETYPES" title="Recommended build archetypes" note="Ordered by general applicability rather than absolute power. Use the build whose entry requirements match your current items." />
               <div className="build-grid">{selected.builds.map((build, index) => <BuildCard build={build} index={index} key={build.name} />)}</div>
             </div>
 
             <div className="subsection" id="priorities">
-              <SectionHeading eyebrow="04 // PURCHASE LOGIC" title="Buy / hold / skip" note="Names are examples; roles are the durable part. An upgrade that fixes your bottleneck beats a prettier synergy." />
+              <SectionHeading eyebrow="06 // PURCHASE LOGIC" title="Buy / hold / skip" note="Names are examples; roles are the durable part. An upgrade that fixes your bottleneck beats a prettier synergy." />
               <div className="priority-grid">
                 <article className="priority-card priority-buy"><span className="priority-icon">↑</span><p>AUTO-BUY / TARGET</p><h3>Highest-impact purchases</h3><BulletList items={selected.buy} tone="good" /></article>
                 <article className="priority-card priority-hold"><span className="priority-icon">◆</span><p>HOLD / CONDITIONAL</p><h3>Retain while conditions apply</h3><BulletList items={selected.hold} /></article>
@@ -328,12 +423,12 @@ export default function Home() {
             </div>
 
             <div className="subsection" id="route-merchants">
-              <SectionHeading eyebrow="05 // MERCHANT ROUTING" title={`Best merchants for ${selected.shortName}`} note="Each recommendation includes the missing half of shop advice: why to enter, when to reroll, and when to leave." />
+              <SectionHeading eyebrow="07 // MERCHANT ROUTING" title={`Best merchants for ${selected.shortName}`} note="Each recommendation includes the missing half of shop advice: why to enter, when to reroll, and when to leave." />
               <div className="merchant-grid">{selected.merchants.map((merchant, index) => <MerchantCard merchant={merchant} index={index} key={merchant.name} />)}</div>
             </div>
 
             <div className="subsection timeline-section" id="timeline">
-              <SectionHeading eyebrow="06 // RUN PHASES" title="Priorities by run phase" />
+              <SectionHeading eyebrow="08 // RUN PHASES" title="Priorities by run phase" />
               <div className="timeline">
                 {selected.timeline.map((step, index) => (
                   <article key={step.phase}><div className="timeline-node"><span>0{index + 1}</span></div><p className="mini-label">{step.phase}</p><h3>{step.title}</h3><p>{step.text}</p></article>
@@ -349,8 +444,27 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="meta-tier-section" id="meta-items">
+          <div className="shell">
+            <SectionHeading eyebrow="09 // PATCH 16 ITEM BOARD" title="Top 20 Dooley item priorities" note="A synthesized opportunity ranking from the current expert guide, Season 16 meta builds, and live card data. It is a purchase heuristic—not an instruction to force disconnected cards." />
+            <div className="global-item-grid">
+              {topDooleyItems.map((item, index) => (
+                <article className={`global-item global-item-${item.tier.toLowerCase()}`} key={item.name}>
+                  <div className="global-item-rank"><span>{(index + 1).toString().padStart(2, "0")}</span><b>{item.tier}</b></div>
+                  <div className="global-item-copy">
+                    <div><h3>{item.name}</h3><span>{item.role}</span></div>
+                    <p>{item.why}</p>
+                    <small><b>BEST IN</b>{item.bestIn}</small>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <p className="tier-method"><b>How to use this:</b> immediate tempo and a supported package outrank speculative ceiling. An S-tier item can still be a skip when its trigger, target, or board-space condition is missing.</p>
+          </div>
+        </section>
+
         <section className="section shell universal-section">
-          <SectionHeading eyebrow="07 // GENERAL PRINCIPLES" title="General Dooley strategy principles" note="Apply these rules when an exact item combination is not listed." />
+          <SectionHeading eyebrow="10 // GENERAL PRINCIPLES" title="General Dooley strategy principles" note="Apply these rules when an exact item combination is not listed." />
           <div className="rule-grid">
             {universalRules.map((rule) => <article className="rule-card" key={rule.kicker}><p>{rule.kicker}</p><h3>{rule.title}</h3><span>{rule.text}</span></article>)}
           </div>
@@ -358,7 +472,7 @@ export default function Home() {
 
         <section className="merchant-directory-section" id="merchants">
           <div className="shell">
-            <SectionHeading eyebrow="08 // SHOP DIRECTORY" title="Merchant selection and reroll criteria" note="Prefer the narrowest pool containing multiple acceptable outcomes. Current reroll prices are included where stable." />
+            <SectionHeading eyebrow="11 // SHOP DIRECTORY" title="Merchant selection and reroll criteria" note="Prefer the narrowest pool containing multiple acceptable outcomes. Current reroll prices are included where stable." />
             <div className="merchant-visual">
               <img src="./merchant-pool-lab.png" alt="Original illustration of a galactic merchant counter organized into colored inventory pools" width="1918" height="820" loading="lazy" />
               <div className="merchant-visual-copy">
@@ -375,7 +489,7 @@ export default function Home() {
             <div className="table-scroll">
               <table>
                 <thead><tr><th>Merchant</th><th>Stock</th><th>Reroll</th><th>Best for</th><th>The rule</th></tr></thead>
-                <tbody>{merchantDirectory.map((merchant) => <tr key={merchant.name}><th>{merchant.name}</th><td>{merchant.stock}</td><td><span className="reroll-chip">{merchant.reroll}</span></td><td>{merchant.bestFor}</td><td>{merchant.rule}</td></tr>)}</tbody>
+                <tbody>{merchantDirectory.map((merchant) => <tr data-category={merchantCategory(merchant.name)} key={merchant.name}><th>{merchant.name}</th><td data-label="Stock">{merchant.stock}</td><td data-label="Reroll"><span className={`reroll-chip ${rerollTone(merchant.reroll)}`}>{merchant.reroll}</span></td><td data-label="Best for">{merchant.bestFor}</td><td data-label="Rule">{merchant.rule}</td></tr>)}</tbody>
               </table>
             </div>
             <p className="directory-source">Current shop pools cross-checked against the <a href="https://bazaar-builds.net/db/merchants/" target="_blank" rel="noreferrer">Bazaar Local merchant database ↗</a>. Availability and tiers can change in hotfixes.</p>
@@ -383,7 +497,7 @@ export default function Home() {
         </section>
 
         <section className="section shell patch-section" id="patch-notes">
-          <SectionHeading eyebrow="09 // PATCH STATUS" title={`Patch ${patchInfo.major} · ${patchInfo.name}`} note={`Live revision ${patchInfo.revision} · reviewed ${patchInfo.reviewedAt}. Each major patch is maintained as a separate strategy snapshot.`} />
+          <SectionHeading eyebrow="12 // PATCH STATUS" title={`Patch ${patchInfo.major} · ${patchInfo.name}`} note={`Live revision ${patchInfo.revision} · reviewed ${patchInfo.reviewedAt}. Each major patch is maintained as a separate strategy snapshot.`} />
           <div className="patch-grid">
             <article className="patch-card patch-card-featured"><span>CURRENT</span><h3>16.1 hotfix state</h3><p>No direct Core balance changes after the Patch 16.0 Core pass. Wallace no longer scales on cooldown.</p><a href={sources.official.href} target="_blank" rel="noreferrer">Read official patch notes ↗</a></article>
             <article className="patch-card"><span>ECONOMY</span><h3>Starting Income is 5</h3><p>Saving through a strong early board matters more. Treat untargeted rerolls as a real cost and prepare a Day 6 target list.</p></article>
@@ -395,7 +509,7 @@ export default function Home() {
         <section className="sources-section" id="sources">
           <div className="shell sources-grid">
             <div>
-              <p className="eyebrow">10 // SOURCES & METHOD</p>
+              <p className="eyebrow">13 // SOURCES & METHOD</p>
               <h2>Evidence and<br />confidence labels</h2>
               <p>Recommendations combine official balance notes, current card data, and high-ranked community guides. Labels distinguish verified mechanics, expert consensus, and situational builds.</p>
               <a className="button button-secondary" href={issueUrl} target="_blank" rel="noreferrer">Report stale strategy ↗</a>

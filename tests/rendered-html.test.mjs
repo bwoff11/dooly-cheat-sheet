@@ -22,6 +22,9 @@ test("server-renders the finished Dooley Runbook", async () => {
   assert.match(html, /<title>Dooley Runbook/);
   assert.match(html, /Core Strategy Reference/);
   assert.match(html, /Merchant selection and reroll criteria/);
+  assert.match(html, /Top 20 Dooley item priorities/);
+  assert.match(html, /What actually works together/);
+  assert.match(html, /RAMPage Drill/);
   assert.match(html, /core-analysis-lab\.png/);
   assert.match(html, /merchant-pool-lab\.png/);
   assert.match(html, /Patch 16/);
@@ -42,6 +45,11 @@ test("keeps patch content and deployment configuration explicit", async () => {
     assert.match(content, new RegExp(`id: "${id}"`));
   }
   assert.match(content, /merchantDirectory/);
+  assert.match(content, /coreDepthById/);
+  assert.match(content, /topDooleyItems/);
+  assert.match(content, /Welding Torch conversion/);
+  assert.match(content, /6 sec at every tier/);
+  assert.doesNotMatch(content, /7 \/ 6 \/ 5 sec · At fight start/);
   assert.match(page, /Best merchants for/);
   assert.match(layout, /og\.png/);
   assert.match(packageJson, /"build:pages"/);
