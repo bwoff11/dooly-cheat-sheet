@@ -1,0 +1,43 @@
+name: Strategy correction
+description: Report stale or inaccurate Dooley advice with a current source.
+title: "[Strategy] Patch 16: "
+labels: ["strategy-review"]
+body:
+  - type: dropdown
+    id: core
+    attributes:
+      label: Core route
+      options:
+        - The Core
+        - Launcher Core
+        - Armored Core
+        - Companion Core
+        - Critical Core
+        - Ignition Core
+        - Primal Core
+        - Weaponized Core
+        - Global merchant advice
+    validations:
+      required: true
+  - type: input
+    id: patch
+    attributes:
+      label: Patch / hotfix
+      placeholder: "16.1"
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: What should change?
+      description: Include the existing claim and a concise correction.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Current source
+      description: Official notes, current card data, or a detailed expert guide are preferred.
+      placeholder: https://
+    validations:
+      required: true
