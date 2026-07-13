@@ -179,7 +179,7 @@ export const cores: CoreGuide[] = [
     ],
     timeline: [
       { phase: "Days 1–3", title: "Find output first", text: "Take efficient tempo and one item worth accelerating. Do not draft a board of only chargers." },
-      { phase: "Days 4–6", title: "Make the arrow", text: "Put fast items left, Core central, payoff right. Sell pieces that interrupt that sentence." },
+      { phase: "Days 4–6", title: "Set activation order", text: "Place fast triggers left, The Core centrally, and the primary payoff right. Remove items that delay this sequence." },
       { phase: "Days 7+", title: "Compress", text: "Upgrade one win condition, add disruption, and judge the Core by casts created—not sentiment." },
     ],
     pivots: ["A self-looping legendary can replace the Core.", "A stronger Large carry can inherit the entire charger shell."],
@@ -199,7 +199,7 @@ export const cores: CoreGuide[] = [
     mechanic:
       "7 / 6 / 5 sec · At fight start, 2 / 3 / 4 other items start Flying. On use, Charge other Flying items 1 sec. Another Friend or Flying item use Charges Launcher Core 1 sec.",
     summary:
-      "The loop Core. It is underwhelming when only one item flies and absurd when nearly every activation feeds another. Build a closed circuit, not a pile of ‘good Flying cards.’",
+      "Launcher requires multiple Flying or Friend activations. Its output increases substantially when Launcher and its payoffs charge one another repeatedly; isolated Flying items are insufficient.",
     plan:
       "Survive the weak assembly phase, reduce the number of items that need Flying, then close a loop where Launcher and its payoffs repeatedly charge each other.",
     pickWhen: [
@@ -276,7 +276,7 @@ export const cores: CoreGuide[] = [
       },
     ],
     timeline: [
-      { phase: "Days 1–3", title: "Earn the right", text: "Prioritize a board that functions without Launcher. Early losses make the assembly tax much harder." },
+      { phase: "Days 1–3", title: "Stabilize without Launcher", text: "Prioritize an independently functional opener. Launcher requires additional setup, so early losses reduce the gold and health available for the transition." },
       { phase: "Days 4–6", title: "Close the circuit", text: "Count exactly which items fly and which casts feed back. Aim to carry roughly 30g into Day 6 when tempo allows." },
       { phase: "Days 7+", title: "Test the loop", text: "Watch the first fight cycle. Fix the one stalled edge with speed, flight, or defense—do not replace everything." },
     ],
@@ -404,7 +404,7 @@ export const cores: CoreGuide[] = [
     timeline: [
       { phase: "Days 1–3", title: "Tempo and save", text: "Use strong Friends, keep Sat-Comm only while it earns its slot, and preserve health." },
       { phase: "Days 4–6", title: "Choose the carry", text: "Decide whether DJ/Brick remains the plan or whether your gold should shop a premium Friend. Strong runs can carry 35–40g into Day 6." },
-      { phase: "Days 7+", title: "Retire the mascot", text: "Replace economy and even Companion Core when Dooltron, Factory, or a self-contained loop is stronger." },
+      { phase: "Days 7+", title: "Replace early components", text: "Replace economy pieces and even Companion Core when Dooltron, Factory, or a self-contained loop produces more value." },
     ],
     pivots: ["DJ Circuit Breaker can become the engine without Companion Core.", "Friend economy can fund any strong Large-item pivot."],
     traps: ["Buying every Friend.", "Wasting one adjacency on a low-impact item.", "Keeping Sat-Comm after its economy no longer repays lost combat power."],
@@ -435,9 +435,9 @@ export const cores: CoreGuide[] = [
       { label: "WEAPON", kind: "payoff", size: 2 },
     ],
     builds: [
-      { name: "Pulse burst", label: "Reliable", confidence: "consensus", pitch: "High-quality weapons cash in the Core’s right-side crit buff immediately.", enter: "Pulse Rifle plus Uzi/SMG or another fast weapon with real damage.", engine: "Fast left casts and early crits charge Core; Core boosts the right-side volley.", mustHave: ["Pulse Rifle or premium weapon", "damage scaling", "reliable crit"], flex: ["Uzi", "SMG", "Memory Card", "Freeze"], pivot: "If damage remains low, transfer the crit shell to a stronger carry instead of adding another weak gun." },
+      { name: "Pulse burst", label: "Reliable", confidence: "consensus", pitch: "High-quality weapons immediately benefit from the Core’s right-side Crit increase.", enter: "Pulse Rifle plus Uzi/SMG or another fast weapon with real damage.", engine: "Fast left casts and early crits charge Core; Core boosts the right-side volley.", mustHave: ["Pulse Rifle or premium weapon", "damage scaling", "reliable crit"], flex: ["Uzi", "SMG", "Memory Card", "Freeze"], pivot: "If damage remains low, transfer the crit shell to a stronger carry instead of adding another weak gun." },
       { name: "Mech Moles / Metronome", label: "Flexible", confidence: "consensus", pitch: "Dense activations feed the crit-charge loop while utility buys a second volley.", enter: "Mech Moles or Metronome arrives with two upgraded weapons.", engine: "Frequent uses and crits cycle Core; Core makes the next sequence more reliable.", mustHave: ["activation engine", "2 meaningful weapons", "crit payoff"], flex: ["Slow", "Haste", "Shield", "Memory Card"], pivot: "Drop the activation package if it occupies more slots than the casts it creates." },
-      { name: "Alpha Ray scaling", label: "High-roll", confidence: "situational", pitch: "External damage scaling fixes the Core’s biggest weakness and lets repeated crits snowball.", enter: "Alpha Ray or Improvised Weaponry appears early enough to scale real weapons.", engine: "Scaling raises the floor; crit multiplier and charge loop raise the ceiling.", mustHave: ["damage scaler", "fast weapon", "Crit Core positioning"], flex: ["Memory Card", "Super Syrup", "Slow", "additional burst"], pivot: "If the scaler is late, favor a naturally high-base-damage carry instead." },
+      { name: "Alpha Ray scaling", label: "High-roll", confidence: "situational", pitch: "External damage scaling compensates for the Core’s low base damage and increases output across repeated Crit cycles.", enter: "Alpha Ray or Improvised Weaponry appears early enough to scale real weapons.", engine: "Damage scaling increases base output; the Crit multiplier and charge loop increase subsequent-cycle output.", mustHave: ["damage scaler", "fast weapon", "Crit Core positioning"], flex: ["Memory Card", "Super Syrup", "Slow", "additional burst"], pivot: "If the scaler is late, favor a naturally high-base-damage carry instead." },
     ],
     buy: ["high-base-damage weapons", "Uzi / SMG", "damage scaling", "Crit up to reliability"],
     hold: ["Memory Card", "Metronome", "one control piece that guarantees volley two"],
@@ -484,7 +484,7 @@ export const cores: CoreGuide[] = [
     builds: [
       { name: "Rocket + Soldering", label: "Reliable", confidence: "consensus", pitch: "Multicast Burn turns every Core cycle into a larger stack and strong early tempo.", enter: "Rocket Launcher or Soldering Gun plus a fast trigger or Haste item.", engine: "Left triggers cycle Ignition; Core scales the right-side multicast Burn carry.", mustHave: ["Rocket Launcher or Soldering Gun", "Haste", "fast Core activators"], flex: ["Blast Doors", "Flint Stones", "Levitation Pad", "control"], pivot: "If the carry is not upgraded by Day 7, shop a larger Burn payoff or one-shot pivot." },
       { name: "Flamethrower carry", label: "Flexible", confidence: "consensus", pitch: "A premium Burn outlet preserves the early scaling shell while improving late damage density.", enter: "Flamethrower appears and the board can accelerate its first cast.", engine: "Ignition and support stack Burn value; Haste compresses Flamethrower’s kill timer.", mustHave: ["Flamethrower", "Haste / CDR", "one survival tool"], flex: ["Thermal Lance", "Metronome", "Freeze", "Shield"], pivot: "Do not keep every early Burn item—condense around the upgraded carry." },
-      { name: "Burn into Boulder", label: "Exit line", confidence: "situational", pitch: "Use Burn tempo and economy to fund a faster late one-shot when sustain invalidates damage-over-time.", enter: "The lobby is out-healing Burn and a Boulder or Soul of the District package becomes available.", engine: "Early wins preserve health and gold; late payoff replaces the damage plan, not the whole support shell.", mustHave: ["premium one-shot payoff", "enough scaling", "clean transition timing"], flex: ["Haste", "Crit", "control", "one Burn utility item"], pivot: "Stay Burn if the pivot is under-scaled; a shiny item is not automatically an upgrade." },
+      { name: "Burn into Boulder", label: "Exit line", confidence: "situational", pitch: "Use Burn tempo and economy to fund a faster late one-shot when sustain invalidates damage-over-time.", enter: "The lobby is out-healing Burn and a Boulder or Soul of the District package becomes available.", engine: "Early wins preserve health and gold; late payoff replaces the damage plan, not the whole support shell.", mustHave: ["premium one-shot payoff", "enough scaling", "clean transition timing"], flex: ["Haste", "Crit", "control", "one Burn utility item"], pivot: "Stay Burn if the pivot is under-scaled; a higher-rarity item is not an upgrade unless it improves expected damage or activation timing." },
     ],
     buy: ["Soldering Gun / Rocket Launcher", "Blast Doors", "Haste", "premium Burn skill or carry"],
     hold: ["Flint Stones", "Power Sander / Levitation Pad", "one defensive answer"],
@@ -495,8 +495,8 @@ export const cores: CoreGuide[] = [
       { name: "Hef", why: "The focused Burn pool is the cleanest way to upgrade Ignition’s payoff after the early Tool shell is assembled.", reroll: "Reroll when multiple Burn upgrades or finishers are live—not when speed is the missing piece.", leave: "Leave when the stack is large enough and cooldown or survival is the bottleneck." },
     ],
     timeline: [
-      { phase: "Days 1–3", title: "Take the free wins", text: "Cheap Burn plus Blast Doors is enough. Visit small shops, but keep the purse growing." },
-      { phase: "Days 4–6", title: "Spend with a list", text: "Enter Day 6 rich, then shop Burn, Haste, and the exact carry tier you need—not every orange card." },
+      { phase: "Days 1–3", title: "Preserve tempo and economy", text: "Cheap Burn plus Blast Doors can stabilize the opener. Use Small-item shops selectively and continue saving for Day 6." },
+      { phase: "Days 4–6", title: "Use a target list", text: "Enter Day 6 with reserves, then buy only Burn, Haste, or carry upgrades that improve the selected build." },
       { phase: "Days 7+", title: "Measure kill time", text: "If sustain outruns your stack, compress into Flamethrower or pivot to a one-shot package." },
     ],
     pivots: ["Flamethrower inherits Burn scaling.", "Boulder or Soul of the District can convert early economy into late burst."],
@@ -518,7 +518,7 @@ export const cores: CoreGuide[] = [
     summary:
       "An adjacency puzzle with a strong small-item opening. It makes two neighboring items into Relics, so you can loop premium non-Relics—but late boards often keep the scaled carry and bench the Core.",
     plan:
-      "Exploit Flint Stones and efficient Tools for early wins and economy, upgrade the best payoff, then hand the run to Dooltron, Flamethrower, Press, or another premium carry.",
+      "Exploit Flint Stones and efficient Tools for early wins and economy, upgrade the best payoff, then transition to Dooltron, Flamethrower, Press, or another premium carry.",
     pickWhen: ["Flint Stones plus Power Drill, Power Sander, Soldering Gun, Plasma Grenade, or SMG is already strong.", "Two important adjacent items can exploit the Relic tag.", "You are comfortable planning an intentional late pivot."],
     avoidWhen: ["Your best items cannot sit adjacent to the Core.", "You are treating the Core’s own hit as enough late-game damage."],
     board: [
@@ -541,9 +541,9 @@ export const cores: CoreGuide[] = [
       { name: "Pol", why: "Large-item stock is where a successful Primal opener converts its saved economy into a real late carry.", reroll: "Reroll when healthy, rich, and several Large finishers improve the board.", leave: "Do not enter poor or desperate; Large misses are costly." },
     ],
     timeline: [
-      { phase: "Days 1–3", title: "Shop small, win cheap", text: "Prioritize Flint and Tools; use free nodes and Curio-style value to build economy." },
+      { phase: "Days 1–3", title: "Build early tempo efficiently", text: "Prioritize Flint and Tools; use free nodes and Curio-style value to build economy." },
       { phase: "Days 4–6", title: "Upgrade the real pieces", text: "A practical upgrade order is Flint, Drill, Grenade, Sander, then Uzi—adjust to your actual damage." },
-      { phase: "Days 7+", title: "Handoff", text: "Condense into Dooltron, Flamethrower, Press, or another premium carry. Primal Core is not sacred." },
+      { phase: "Days 7+", title: "Late-game transition", text: "Condense into Dooltron, Flamethrower, Press, or another premium carry. Replace Primal Core when the premium carry produces more value without it." },
     ],
     pivots: ["Dooltron converts broad tags into late power.", "Flamethrower or Press can keep the best acceleration while replacing early filler."],
     traps: ["Keeping every Tool because it was good on Day 3.", "Ignoring the two adjacency-granted Relic slots.", "Missing the late transition window while rich."],
@@ -587,9 +587,9 @@ export const cores: CoreGuide[] = [
       { name: "Tok’s Clocks", why: "Haste and cooldown reduction help Weaponized cast before the carry; Slow lets scaling compound.", reroll: "Reroll when weapon quality is high but first-cycle timing is wrong.", leave: "Leave if the board is fast enough and lacks crit or base damage." },
     ],
     timeline: [
-      { phase: "Days 1–3", title: "Win the timing race", text: "Buy efficient weapons, but prioritize a fast activator that makes Core cast first." },
+      { phase: "Days 1–3", title: "Ensure the Core activates first", text: "Buy efficient weapons, but prioritize a fast activator that makes Core cast first." },
       { phase: "Days 4–6", title: "Scale fewer weapons", text: "Upgrade Pulse/Arc or the best carry, fix Haste, and start adding crit." },
-      { phase: "Days 7+", title: "Bridge to late", text: "Condense around a premium weapon, add control, and use Scrap Metal only when the Core upgrade is material." },
+      { phase: "Days 7+", title: "Consolidate the late-game board", text: "Condense around a premium weapon, add control, and use Scrap Metal only when the Core upgrade is material." },
     ],
     pivots: ["Any premium weapon can inherit the scaling shell.", "Combat Core or Cybersecurity can create a more specialized late Tech board."],
     traps: ["Core casting after the carry’s first shot.", "Buying too many weapons instead of upgrading two.", "Entering late fights with no crit or control."],
@@ -615,10 +615,10 @@ export const merchantDirectory = [
 ];
 
 export const universalRules = [
-  { kicker: "01 · Position", title: "Read left → Core → right", text: "Most Dooley boards are a sentence: fast triggers feed the Core; the Core accelerates or scales the payoff. If that sentence is unclear, the board probably is too." },
-  { kicker: "02 · Density", title: "One carry beats three maybes", text: "A compact engine creates more useful casts and leaves room for control. Upgrade the win condition before collecting another synergy tag." },
-  { kicker: "03 · Economy", title: "Keep a Day 6 reserve", text: "Patch 16 starts income at 5. Strong early boards should bank gold, then enter targeted shops with a hit list instead of dribbling gold into random rerolls." },
-  { kicker: "04 · Pivots", title: "The Core is not sacred", text: "Cores are starting engines. Bench one when a self-contained legendary or cleaner late package produces more useful actions." },
-  { kicker: "05 · Shops", title: "Reroll for ranges, not miracles", text: "Pay for a reroll when multiple results improve the board. If only one exact card hits, preserve the gold and take the best live line." },
-  { kicker: "06 · Fights", title: "Watch the first cycle", text: "The first ten seconds reveal the bottleneck: Core too late, carry too early, no survival, or no damage. Buy the fix for that edge—not generic power." },
+  { kicker: "01 · Position", title: "Use trigger → Core → payoff order", text: "Use this default activation order: fast triggers → Core → primary payoff. Each item should accelerate the Core, receive its effect, provide defense, or supply control." },
+  { kicker: "02 · Density", title: "Concentrate scaling on one carry", text: "A compact engine creates more useful casts and leaves room for control. Upgrade the primary win condition before adding another synergy tag." },
+  { kicker: "03 · Economy", title: "Keep a Day 6 reserve", text: "Patch 16 starts income at 5. Strong early boards should bank gold, then enter targeted shops with a target list instead of spending incrementally on untargeted rerolls." },
+  { kicker: "04 · Pivots", title: "Replace the Core when slot value falls", text: "Cores are starting engines. Bench one when a self-contained legendary or cleaner late package produces more useful actions." },
+  { kicker: "05 · Shops", title: "Reroll with multiple acceptable outcomes", text: "Pay for a reroll when multiple results improve the board. If only one exact card hits, preserve the gold and continue with the strongest currently supported build." },
+  { kicker: "06 · Fights", title: "Diagnose the first combat cycle", text: "The first ten seconds reveal the bottleneck: Core too late, carry too early, insufficient survival, or insufficient damage. Buy the specific correction rather than generic power." },
 ];

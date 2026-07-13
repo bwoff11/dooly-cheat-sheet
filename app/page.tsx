@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- Generated local art is shipped unchanged by both static and Worker builds. */
+
 import { useEffect, useMemo, useState } from "react";
 import {
   cores,
@@ -61,7 +63,7 @@ function BoardMap({ core }: { core: CoreGuide }) {
     <div className="board-wrap" aria-label={`Suggested board logic for ${core.name}`}>
       <div className="board-labels" aria-hidden="true">
         <span>LEFT · FEEDS CORE</span>
-        <span>RIGHT · GETS PAID</span>
+        <span>RIGHT · RECEIVES CORE EFFECT</span>
       </div>
       <div className="board-map">
         {core.board.map((slot, index) => (
@@ -76,7 +78,7 @@ function BoardMap({ core }: { core: CoreGuide }) {
           </div>
         ))}
       </div>
-      <p className="board-caption">A logic map, not a locked board. Item size and exact slots change with the line.</p>
+      <p className="board-caption">General activation order. Exact slots depend on item sizes and the selected build.</p>
     </div>
   );
 }
@@ -85,7 +87,7 @@ function BuildCard({ build, index }: { build: BuildLine; index: number }) {
   return (
     <article className="build-card">
       <div className="build-topline">
-        <span className="build-index">LINE 0{index + 1}</span>
+        <span className="build-index">BUILD 0{index + 1}</span>
         <ConfidenceBadge level={build.confidence} />
       </div>
       <h3>{build.name}</h3>
@@ -109,7 +111,7 @@ function BuildCard({ build, index }: { build: BuildLine; index: number }) {
         <p>Flex slots</p>
         <div>{build.flex.map((item) => <span className="item-chip" key={item}>{item}</span>)}</div>
       </div>
-      <div className="pivot-callout"><span>PIVOT CHECK</span>{build.pivot}</div>
+      <div className="pivot-callout"><span>PIVOT CONDITION</span>{build.pivot}</div>
     </article>
   );
 }
@@ -119,7 +121,7 @@ function MerchantCard({ merchant, index }: { merchant: CoreGuide["merchants"][nu
     <article className="merchant-card">
       <div className="merchant-rank"><span>0{index + 1}</span><i /></div>
       <div>
-        <p className="mini-label">ROUTE PRIORITY</p>
+        <p className="mini-label">CORE PRIORITY</p>
         <h3>{merchant.name}</h3>
         <p className="merchant-why">{merchant.why}</p>
         <div className="merchant-decisions">
@@ -151,7 +153,7 @@ function Header({ core }: { core: CoreGuide }) {
       </nav>
       <div className="header-status">
         <span className="live-dot" />
-        <span><small>ACTIVE ROUTE</small><b>{core.shortName}</b></span>
+        <span><small>SELECTED CORE</small><b>{core.shortName}</b></span>
       </div>
     </header>
   );
@@ -211,51 +213,47 @@ export default function Home() {
                 <span>Patch {patchInfo.major} · rev {patchInfo.revision}</span>
                 <span>Reviewed {patchInfo.reviewedAt}</span>
               </div>
-              <p className="eyebrow">A PATCH-LOCKED FIELD GUIDE</p>
-              <h1>Choose a Core.<br /><em>Find the line.</em></h1>
+              <p className="eyebrow">PATCH 16.1 STRATEGY REFERENCE</p>
+              <h1>Dooley Core<br /><em>Strategy Reference</em></h1>
               <p className="hero-lede">
-                A fast Dooley cheat sheet for players who know strategy games but do not want a wiki open mid-run. Pick what you were offered; get the plan, purchases, merchants, pivots, and traps.
+                Select a Core to view current mechanics, recommended build archetypes, activation order, purchase priorities, merchant targets, and pivot conditions.
               </p>
               <div className="hero-actions">
-                <a className="button button-primary" href="#core-picker">Choose your Core <span>↓</span></a>
-                <a className="button button-secondary" href="#merchants">Merchant cheat sheet</a>
+                <a className="button button-primary" href="#core-picker">Select Core <span>↓</span></a>
+                <a className="button button-secondary" href="#merchants">Merchant reference</a>
               </div>
-              <p className="hero-footnote"><b>Rule zero:</b> build a line, not a screenshot. The best board is the strongest route your run actually offered.</p>
+              <p className="hero-footnote"><b>Selection criterion:</b> commit to a build only when its required items and activation order are already supported.</p>
             </div>
-            <div className="hero-console" aria-label="Run briefing">
-              <div className="console-top"><span>RUN // 16.1</span><span className="console-lights"><i /><i /><i /></span></div>
-              <div className="bot-display">
-                <div className="orbit orbit-one" /><div className="orbit orbit-two" />
-                <div className="bot-head"><span className="bot-ear" /><div className="bot-face"><i /><i /><b>ᴗ</b></div><span className="bot-ear" /></div>
-                <div className="core-orb"><span>{selected.signal}</span></div>
-              </div>
-              <div className="console-readout">
+            <div className="hero-visual" aria-label="Core strategy analysis">
+              <img className="hero-art" src="./core-analysis-lab.png" alt="Original illustration of a modular robot analyzing eight colored power cores in a galactic workshop" width="1672" height="941" fetchPriority="high" />
+              <div className="visual-status"><span>PATCH DATASET</span><b>16.1</b></div>
+              <div className="visual-readout">
                 <p><span>CORE ROUTES</span><b>{cores.length.toString().padStart(2, "0")}</b></p>
-                <p><span>BUILD LINES</span><b>{cores.reduce((sum, core) => sum + core.builds.length, 0)}</b></p>
-                <p><span>MERCHANT CALLS</span><b>{cores.reduce((sum, core) => sum + core.merchants.length, 0)}</b></p>
+                <p><span>BUILD ARCHETYPES</span><b>{cores.reduce((sum, core) => sum + core.builds.length, 0)}</b></p>
+                <p><span>MERCHANT RANKINGS</span><b>{cores.reduce((sum, core) => sum + core.merchants.length, 0)}</b></p>
               </div>
-              <div className="console-tip"><span>START HERE</span><p>Pick a route only when its entry signals match your board.</p></div>
+              <div className="visual-rule"><span>SELECTION RULE</span><p>Choose a build only when your current items satisfy its entry criteria.</p></div>
             </div>
           </div>
         </section>
 
         <section className="run-strip">
           <div className="shell run-strip-inner">
-            <p><b>NEW RUN?</b> Use this order</p>
+            <p><b>IN-RUN ORDER</b></p>
             <ol>
-              <li><span>1</span> Read pick signals</li>
-              <li><span>2</span> Choose one live line</li>
-              <li><span>3</span> Shop its merchants</li>
-              <li><span>4</span> Re-check pivot on Day 7</li>
+              <li><span>1</span> Compare entry criteria</li>
+              <li><span>2</span> Select a supported build</li>
+              <li><span>3</span> Target ranked merchants</li>
+              <li><span>4</span> Reassess after Day 7</li>
             </ol>
           </div>
         </section>
 
         <section className="section shell core-picker" id="core-picker">
           <SectionHeading
-            eyebrow="01 // SELECT ROUTE"
-            title="What Core did you pick?"
-            note="Launcher is included as a current specialist route. The archive will grow by major patch without overwriting this one."
+            eyebrow="01 // CORE INDEX"
+            title="Select a Core"
+            note="Seven starting Core choices are listed with Launcher as a separate specialist route. Patch snapshots remain archived by major version."
           />
           <div className="picker-toolbar">
             <label className="patch-select"><span>Major patch</span><select aria-label="Select major patch" defaultValue="16"><option value="16">16 · The Invasion Begins</option></select></label>
@@ -270,11 +268,11 @@ export default function Home() {
                 aria-pressed={selected.id === core.id}
                 key={core.id}
               >
-                <div className="core-card-top"><CoreSignal core={core} /><span>{selected.id === core.id ? "LOADED" : "SELECT"}</span></div>
+                <div className="core-card-top"><CoreSignal core={core} /><span>{selected.id === core.id ? "SELECTED" : "VIEW"}</span></div>
                 <h3>{core.name}</h3>
                 <p>{core.role}</p>
                 <div className="core-tags"><span>{core.difficulty}</span><span>{core.tempo}</span></div>
-                <div className="core-card-arrow">Open route <b>↗</b></div>
+                <div className="core-card-arrow">View strategy <b>↗</b></div>
               </button>
             ))}
           </div>
@@ -286,26 +284,26 @@ export default function Home() {
             <div className="guide-header">
               <CoreSignal core={selected} />
               <div className="guide-title">
-                <p className="eyebrow">02 // ACTIVE ROUTE</p>
+                <p className="eyebrow">02 // SELECTED CORE</p>
                 <h2>{selected.name}</h2>
                 <p>{selected.role}</p>
               </div>
               <div className="guide-metrics">
                 <p><span>DIFFICULTY</span><b>{selected.difficulty}</b></p>
                 <p><span>TEMPO</span><b>{selected.tempo}</b></p>
-                <button type="button" onClick={shareRoute}>{copied ? "LINK COPIED" : "SHARE ROUTE"}</button>
+                <button type="button" onClick={shareRoute}>{copied ? "LINK COPIED" : "COPY CORE LINK"}</button>
               </div>
             </div>
             <nav className="guide-nav" aria-label={`${selected.name} sections`}>
-              <a href="#briefing">Briefing</a><a href="#builds">Builds</a><a href="#priorities">Buy list</a><a href="#route-merchants">Merchants</a><a href="#timeline">Timeline</a>
+              <a href="#briefing">Overview</a><a href="#builds">Builds</a><a href="#priorities">Buy list</a><a href="#route-merchants">Merchants</a><a href="#timeline">Run phases</a>
             </nav>
 
             <div className="briefing-grid" id="briefing">
               <article className="panel briefing-main">
-                <p className="panel-kicker">THE 20-SECOND BRIEF</p>
+                <p className="panel-kicker">STRATEGY SUMMARY</p>
                 <h3>{selected.summary}</h3>
-                <div className="plan-callout"><span>THE PLAN</span><p>{selected.plan}</p></div>
-                <div className="mechanic-line"><span>CURRENT TEXT · 16.1</span><p>{selected.mechanic}</p></div>
+                <div className="plan-callout"><span>RECOMMENDED APPROACH</span><p>{selected.plan}</p></div>
+                <div className="mechanic-line"><span>CORE MECHANICS · PATCH 16.1</span><p>{selected.mechanic}</p></div>
               </article>
               <article className="panel signal-panel">
                 <div className="signal-column"><p className="panel-kicker good-kicker">PICK THIS WHEN</p><BulletList items={selected.pickWhen} tone="good" /></div>
@@ -316,16 +314,16 @@ export default function Home() {
             <BoardMap core={selected} />
 
             <div className="subsection" id="builds">
-              <SectionHeading eyebrow="03 // BUILD LINES" title="Three ways this route wins" note="Ordered by usefulness, not presented as a rigid tier list. Expand the line your items actually support." />
+              <SectionHeading eyebrow="03 // BUILD ARCHETYPES" title="Recommended build archetypes" note="Ordered by general applicability rather than absolute power. Use the build whose entry requirements match your current items." />
               <div className="build-grid">{selected.builds.map((build, index) => <BuildCard build={build} index={index} key={build.name} />)}</div>
             </div>
 
             <div className="subsection" id="priorities">
               <SectionHeading eyebrow="04 // PURCHASE LOGIC" title="Buy / hold / skip" note="Names are examples; roles are the durable part. An upgrade that fixes your bottleneck beats a prettier synergy." />
               <div className="priority-grid">
-                <article className="priority-card priority-buy"><span className="priority-icon">↑</span><p>AUTO-BUY / TARGET</p><h3>Moves the line forward</h3><BulletList items={selected.buy} tone="good" /></article>
-                <article className="priority-card priority-hold"><span className="priority-icon">◆</span><p>HOLD / CONDITIONAL</p><h3>Useful while it earns space</h3><BulletList items={selected.hold} /></article>
-                <article className="priority-card priority-skip"><span className="priority-icon">×</span><p>SKIP / SELL</p><h3>Looks right, plays wrong</h3><BulletList items={selected.skip} tone="warn" /></article>
+                <article className="priority-card priority-buy"><span className="priority-icon">↑</span><p>AUTO-BUY / TARGET</p><h3>Highest-impact purchases</h3><BulletList items={selected.buy} tone="good" /></article>
+                <article className="priority-card priority-hold"><span className="priority-icon">◆</span><p>HOLD / CONDITIONAL</p><h3>Retain while conditions apply</h3><BulletList items={selected.hold} /></article>
+                <article className="priority-card priority-skip"><span className="priority-icon">×</span><p>SKIP / SELL</p><h3>Low-impact or incompatible</h3><BulletList items={selected.skip} tone="warn" /></article>
               </div>
             </div>
 
@@ -335,15 +333,15 @@ export default function Home() {
             </div>
 
             <div className="subsection timeline-section" id="timeline">
-              <SectionHeading eyebrow="06 // RUN TIMELINE" title="What changes as the run ages" />
+              <SectionHeading eyebrow="06 // RUN PHASES" title="Priorities by run phase" />
               <div className="timeline">
                 {selected.timeline.map((step, index) => (
                   <article key={step.phase}><div className="timeline-node"><span>0{index + 1}</span></div><p className="mini-label">{step.phase}</p><h3>{step.title}</h3><p>{step.text}</p></article>
                 ))}
               </div>
               <div className="exit-grid">
-                <article className="panel"><p className="panel-kicker">PIVOT DOORS</p><BulletList items={selected.pivots} tone="good" /></article>
-                <article className="panel trap-panel"><p className="panel-kicker warn-kicker">COMMON TRAPS</p><BulletList items={selected.traps} tone="warn" /></article>
+                <article className="panel"><p className="panel-kicker">PIVOT OPTIONS</p><BulletList items={selected.pivots} tone="good" /></article>
+                <article className="panel trap-panel"><p className="panel-kicker warn-kicker">FAILURE MODES</p><BulletList items={selected.traps} tone="warn" /></article>
               </div>
             </div>
 
@@ -352,7 +350,7 @@ export default function Home() {
         </section>
 
         <section className="section shell universal-section">
-          <SectionHeading eyebrow="07 // SYSTEM RULES" title="Dooley rules that survive the patch" note="Use these when your exact item combination is not listed. They are the decision framework behind every route above." />
+          <SectionHeading eyebrow="07 // GENERAL PRINCIPLES" title="General Dooley strategy principles" note="Apply these rules when an exact item combination is not listed." />
           <div className="rule-grid">
             {universalRules.map((rule) => <article className="rule-card" key={rule.kicker}><p>{rule.kicker}</p><h3>{rule.title}</h3><span>{rule.text}</span></article>)}
           </div>
@@ -360,7 +358,15 @@ export default function Home() {
 
         <section className="merchant-directory-section" id="merchants">
           <div className="shell">
-            <SectionHeading eyebrow="08 // SHOP DIRECTORY" title="Merchant routing, without the guessing" note="The best merchant is the narrowest pool with multiple live hits. Reroll prices are shown where current data is stable." />
+            <SectionHeading eyebrow="08 // SHOP DIRECTORY" title="Merchant selection and reroll criteria" note="Prefer the narrowest pool containing multiple acceptable outcomes. Current reroll prices are included where stable." />
+            <div className="merchant-visual">
+              <img src="./merchant-pool-lab.png" alt="Original illustration of a galactic merchant counter organized into colored inventory pools" width="1918" height="820" loading="lazy" />
+              <div className="merchant-visual-copy">
+                <p className="mini-label">MERCHANT POOL ANALYSIS</p>
+                <h3>Require multiple acceptable outcomes before rerolling.</h3>
+                <ol><li>Define the board bottleneck</li><li>Count acceptable hits</li><li>Set the exit condition</li></ol>
+              </div>
+            </div>
             <div className="directory-intro">
               <p><b>Before Core selection:</b> hedge 3–4 routes with efficient items. Mittel and Ande usually expose the densest early Dooley pieces.</p>
               <p><b>After selection:</b> shop the bottleneck—payoff, speed, or defense—not merely the Core’s keyword.</p>
@@ -377,12 +383,12 @@ export default function Home() {
         </section>
 
         <section className="section shell patch-section" id="patch-notes">
-          <SectionHeading eyebrow="09 // PATCH CONTROL" title={`Patch ${patchInfo.major} · ${patchInfo.name}`} note={`Live revision ${patchInfo.revision} · reviewed ${patchInfo.reviewedAt}. Future major patches get separate snapshots instead of silently rewriting history.`} />
+          <SectionHeading eyebrow="09 // PATCH STATUS" title={`Patch ${patchInfo.major} · ${patchInfo.name}`} note={`Live revision ${patchInfo.revision} · reviewed ${patchInfo.reviewedAt}. Each major patch is maintained as a separate strategy snapshot.`} />
           <div className="patch-grid">
             <article className="patch-card patch-card-featured"><span>CURRENT</span><h3>16.1 hotfix state</h3><p>No direct Core balance changes after the Patch 16.0 Core pass. Wallace no longer scales on cooldown.</p><a href={sources.official.href} target="_blank" rel="noreferrer">Read official patch notes ↗</a></article>
-            <article className="patch-card"><span>ECONOMY</span><h3>Starting Income is 5</h3><p>Saving through a strong early board matters more. Treat random rerolls as a real cost and prepare a Day 6 hit list.</p></article>
+            <article className="patch-card"><span>ECONOMY</span><h3>Starting Income is 5</h3><p>Saving through a strong early board matters more. Treat untargeted rerolls as a real cost and prepare a Day 6 target list.</p></article>
             <article className="patch-card"><span>CORE PASS</span><h3>Upgrades matter more</h3><p>Armored, Critical, The, Primal, Weaponized, and Ignition received tier-scaled base values in 16.0.</p></article>
-            <article className="patch-card"><span>ARCHIVE</span><h3>This is snapshot 001</h3><p>Patch 16 is the first preserved runbook. The data model already separates major patch, live revision, review date, and sources.</p></article>
+            <article className="patch-card"><span>ARCHIVE</span><h3>Patch 16 strategy snapshot</h3><p>Patch 16 is the first archived major-patch dataset. Major version, live revision, review date, and sources remain separate.</p></article>
           </div>
         </section>
 
@@ -390,8 +396,8 @@ export default function Home() {
           <div className="shell sources-grid">
             <div>
               <p className="eyebrow">10 // SOURCES & METHOD</p>
-              <h2>Consensus first.<br />Theory labeled.</h2>
-              <p>This runbook reconciles official balance notes and current card data with high-ranked community guides. It favors repeatable build lines over isolated 10-win screenshots.</p>
+              <h2>Evidence and<br />confidence labels</h2>
+              <p>Recommendations combine official balance notes, current card data, and high-ranked community guides. Labels distinguish verified mechanics, expert consensus, and situational builds.</p>
               <a className="button button-secondary" href={issueUrl} target="_blank" rel="noreferrer">Report stale strategy ↗</a>
             </div>
             <div className="source-list">

@@ -20,8 +20,10 @@ test("server-renders the finished Dooley Runbook", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Dooley Runbook/);
-  assert.match(html, /Choose a Core/);
-  assert.match(html, /Merchant routing/);
+  assert.match(html, /Core Strategy Reference/);
+  assert.match(html, /Merchant selection and reroll criteria/);
+  assert.match(html, /core-analysis-lab\.png/);
+  assert.match(html, /merchant-pool-lab\.png/);
   assert.match(html, /Patch 16/);
   assert.match(html, /The Core/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);

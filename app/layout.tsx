@@ -5,25 +5,25 @@ const siteUrl = "https://bwoff11.github.io/dooly-cheat-sheet/";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Dooley Runbook — The Bazaar Core Cheat Sheet",
+  title: "Dooley Runbook — Patch 16.1 Core Strategy Reference",
   description:
-    "A patch-locked Dooley cheat sheet for The Bazaar: build lines, buy priorities, board order, pivots, and the best merchants for every Core route.",
+    "A patch-locked Dooley cheat sheet for The Bazaar: build archetypes, purchase priorities, activation order, pivot conditions, and ranked merchants for every Core route.",
   applicationName: "Dooley Runbook",
   keywords: ["The Bazaar", "Dooley", "guide", "cheat sheet", "Core", "builds", "merchants"],
   authors: [{ name: "Dooley Runbook contributors" }],
   icons: { icon: "./favicon.svg", shortcut: "./favicon.svg" },
   openGraph: {
-    title: "Dooley Runbook — Choose a Core. Find the line.",
-    description: "Patch 16.1 build lines, purchases, merchant routing, pivots, and traps for every current Dooley Core route.",
+    title: "Dooley Runbook — Patch 16.1 Core Strategy Reference",
+    description: "Patch 16.1 build archetypes, purchase priorities, activation order, merchant targets, and pivot conditions for every Dooley Core route.",
     type: "website",
     url: siteUrl,
     siteName: "Dooley Runbook",
-    images: [{ url: `${siteUrl}og.png`, width: 1730, height: 909, alt: "Dooley Runbook field guide" }],
+    images: [{ url: `${siteUrl}og.png`, width: 1727, height: 911, alt: "Dooley Runbook Patch 16.1 Core strategy reference" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Dooley Runbook",
-    description: "Choose a Core. Find the line.",
+    description: "Build archetypes, item priorities, activation order, and merchant targets for every Dooley Core.",
     images: [`${siteUrl}og.png`],
   },
 };
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#071019",
+  themeColor: "#060911",
   colorScheme: "dark",
 };
 
