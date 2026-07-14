@@ -9,10 +9,11 @@ A patch-locked strategy reference for playing Dooley in **The Bazaar**. It sits 
 - Patch 16, reviewed against revision 16.1
 - Seven starting Core choices plus a Launcher specialist route
 - A synthesized 40-item Dooley opportunity tier list with explicit S / A / B / C purchase tests
-- Ten Core-specific item priorities for every route
+- At least ten Core-specific item priorities for every route
 - At least four synergy packages per Core, including operational and failure conditions
 - A dedicated Plasma Rifle conversion lab for Ignition: event math, sequencing, partners, upgrades, merchants, and purchase gates
-- Three recommended build archetypes per Core
+- Trollosaur route coverage across Ignition, Primal, and Weaponized: current tooltip, damage/Burn math, destroy triggers, merchants, and pass conditions
+- Three or more recommended build archetypes per Core
 - Buy / hold / skip priorities
 - Activation order and priorities by run phase
 - Ranked merchants per Core, with why to enter, when to reroll, and when to leave

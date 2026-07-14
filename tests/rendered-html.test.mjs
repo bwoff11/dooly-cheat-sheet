@@ -59,6 +59,16 @@ test("keeps patch content and deployment configuration explicit", async () => {
   assert.match(content, /Plasma Rifle — Patch 16\.1 live mechanics/);
   assert.match(content, /Plasma Rifle conversion/);
   assert.match(content, /Burn events become direct damage/);
+  assert.match(content, /Trollosaur — Patch 16\.1 live mechanics/);
+  assert.match(content, /bazaardb\.gg\/card\/ctn94sibhw28l1qmf2j48nxw8\/Trollosaur/);
+  assert.match(content, /Burn is equal to 10% of current Damage/);
+  assert.match(content, /Trollosaur breakpoint hybrid/);
+  assert.match(content, /Diana Trollosaur destroy/);
+  assert.match(content, /Weaponized Trollosaur/);
+  assert.match(content, /Trollosaur \/ Diana-Saur packages/);
+  assert.match(content, /unsupported nine-second Trollosaur/);
+  assert.match(content, /live Patch 16\.1 card has no permanent-scaling line/);
+  assert.match(content, /Each Trollosaur use contributes exactly one Burn application/);
   assert.match(page, /PURCHASE HEURISTIC/);
   assert.match(page, /spotlight\.partners\.map/);
   assert.match(content, /Welding Torch conversion/);
