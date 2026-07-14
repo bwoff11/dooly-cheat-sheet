@@ -14,6 +14,8 @@ import {
   type BuildLine,
   type Confidence,
   type CoreGuide,
+  type GlobalItemTier,
+  type GlobalRankedItem,
   type ItemTier,
   type RankedItem,
   type SynergyPackage,
@@ -93,6 +95,70 @@ function ItemTierBoard({ items }: { items: RankedItem[] }) {
         );
       })}
     </div>
+  );
+}
+
+const globalTierOrder: GlobalItemTier[] = ["S", "A", "B", "C"];
+
+const globalTierMeta: Record<GlobalItemTier, { label: string; description: string }> = {
+  S: { label: "Route defining", description: "Can establish or complete a top-level plan when its target or trigger is live." },
+  A: { label: "Broadly strong", description: "High-value pieces with several supported routes and a low opportunity cost." },
+  B: { label: "Package dependent", description: "Powerful after a specific engine, target, or breakpoint has been proven." },
+  C: { label: "Conditional", description: "Narrow pivots, bridges, or premium finishers that need exact evidence before purchase." },
+};
+
+function GlobalItemCard({ item }: { item: GlobalRankedItem }) {
+  return (
+    <li className="global-tier-item" value={item.rank}>
+      <div className="global-tier-rank" aria-label={`Global rank ${item.rank}`}>{item.rank.toString().padStart(2, "0")}</div>
+      <div className="global-tier-copy">
+        <header><h4>{item.name}</h4><span className="global-role-chip">{item.role}</span></header>
+        <p className="global-item-summary">{item.summary}</p>
+        <div className="global-best-in" aria-label="Recommended routes">
+          <b>BEST IN</b>
+          {item.bestIn.map((route) => <span key={route}>{route}</span>)}
+        </div>
+        <details className="global-item-analysis">
+          <summary>Why it ranks here</summary>
+          <p>{item.why}</p>
+          <p className="global-item-condition"><b>TAKE WHEN</b><span>{item.condition}</span></p>
+        </details>
+      </div>
+    </li>
+  );
+}
+
+function GlobalItemTierBoard({ items }: { items: GlobalRankedItem[] }) {
+  const groups = globalTierOrder.map((tier) => ({
+    tier,
+    meta: globalTierMeta[tier],
+    items: items.filter((item) => item.tier === tier).sort((a, b) => a.rank - b.rank),
+  }));
+
+  return (
+    <>
+      <nav className="global-tier-jump" aria-label="Jump to item tier">
+        {groups.map(({ tier, meta, items: tierItems }) => (
+          <a href={`#global-tier-${tier.toLowerCase()}`} key={tier}>
+            <b>{tier}</b><span>{meta.label}</span><i>{tierItems.length}</i>
+          </a>
+        ))}
+      </nav>
+      <div className="global-tier-board">
+        {groups.map(({ tier, meta, items: tierItems }) => (
+          <section className={`global-tier-group global-tier-${tier.toLowerCase()}`} id={`global-tier-${tier.toLowerCase()}`} aria-labelledby={`global-tier-${tier.toLowerCase()}-title`} key={tier}>
+            <header className="global-tier-header">
+              <span aria-hidden="true">{tier}</span>
+              <div><h3 id={`global-tier-${tier.toLowerCase()}-title`}>{tier} tier · {meta.label}</h3><p>{meta.description}</p></div>
+              <b>{tierItems.length.toString().padStart(2, "0")} ITEMS</b>
+            </header>
+            <ol className="global-tier-items" aria-label={`${tier} tier items`}>
+              {tierItems.map((item) => <GlobalItemCard item={item} key={item.name} />)}
+            </ol>
+          </section>
+        ))}
+      </div>
+    </>
   );
 }
 
@@ -446,20 +512,9 @@ export default function Home() {
 
         <section className="meta-tier-section" id="meta-items">
           <div className="shell">
-            <SectionHeading eyebrow="09 // PATCH 16 ITEM BOARD" title="Top 20 Dooley item priorities" note="A synthesized opportunity ranking from the current expert guide, Season 16 meta builds, and live card data. It is a purchase heuristic—not an instruction to force disconnected cards." />
-            <div className="global-item-grid">
-              {topDooleyItems.map((item, index) => (
-                <article className={`global-item global-item-${item.tier.toLowerCase()}`} key={item.name}>
-                  <div className="global-item-rank"><span>{(index + 1).toString().padStart(2, "0")}</span><b>{item.tier}</b></div>
-                  <div className="global-item-copy">
-                    <div><h3>{item.name}</h3><span>{item.role}</span></div>
-                    <p>{item.why}</p>
-                    <small><b>BEST IN</b>{item.bestIn}</small>
-                  </div>
-                </article>
-              ))}
-            </div>
-            <p className="tier-method"><b>How to use this:</b> immediate tempo and a supported package outrank speculative ceiling. An S-tier item can still be a skip when its trigger, target, or board-space condition is missing.</p>
+            <SectionHeading eyebrow={`09 // PATCH 16 ITEM BOARD · ${topDooleyItems.length} ITEMS`} title="Dooley item opportunity tiers" note="A four-tier purchase field guide synthesized from the current expert guide, Season 16 meta builds, and live card data. Rank measures general opportunity value—not isolated tooltip ceiling." />
+            <GlobalItemTierBoard items={topDooleyItems} />
+            <p className="tier-method"><b>How to use this:</b> immediate tempo and a supported package outrank speculative ceiling. S means route-defining, not automatic buy; C means narrow or exact-package, not unplayable. Open any card for the purchase test.</p>
           </div>
         </section>
 

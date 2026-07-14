@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Dooley Runbook — Patch 16.1 Core Strategy Reference",
   description:
-    "A professional Patch 16.1 Dooley guide for The Bazaar: top-20 item tiers, Core-specific rankings, proven synergies, builds, pivots, and merchant priorities.",
+    "A professional Patch 16.1 Dooley guide for The Bazaar: 40-item S/A/B/C tiers, Core-specific rankings, proven synergies, builds, pivots, and merchant priorities.",
   applicationName: "Dooley Runbook",
   keywords: ["The Bazaar", "Dooley", "guide", "cheat sheet", "Core", "builds", "merchants"],
   authors: [{ name: "Dooley Runbook contributors" }],

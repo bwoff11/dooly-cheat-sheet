@@ -8,7 +8,7 @@ A patch-locked strategy reference for playing Dooley in **The Bazaar**. It sits 
 
 - Patch 16, reviewed against revision 16.1
 - Seven starting Core choices plus a Launcher specialist route
-- A synthesized top-20 Dooley item tier list
+- A synthesized 40-item Dooley opportunity tier list with explicit S / A / B / C purchase tests
 - Ten Core-specific item priorities for every route
 - Four synergy packages per Core, including operational and failure conditions
 - Three recommended build archetypes per Core

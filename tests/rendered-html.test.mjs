@@ -22,7 +22,11 @@ test("server-renders the finished Dooley Runbook", async () => {
   assert.match(html, /<title>Dooley Runbook/);
   assert.match(html, /Core Strategy Reference/);
   assert.match(html, /Merchant selection and reroll criteria/);
-  assert.match(html, /Top 20 Dooley item priorities/);
+  assert.match(html, /Dooley item opportunity tiers/);
+  assert.match(html, /PATCH 16 ITEM BOARD · 40 ITEMS/);
+  assert.match(html, /global-tier-c/);
+  assert.match(html, /Conditional/);
+  assert.match(html, /TAKE WHEN/);
   assert.match(html, /What actually works together/);
   assert.match(html, /RAMPage Drill/);
   assert.match(html, /core-analysis-lab\.png/);
@@ -47,6 +51,8 @@ test("keeps patch content and deployment configuration explicit", async () => {
   assert.match(content, /merchantDirectory/);
   assert.match(content, /coreDepthById/);
   assert.match(content, /topDooleyItems/);
+  assert.match(content, /rank: 40, name: "Alpha Ray", tier: "C"/);
+  assert.equal(content.match(/\{ rank: \d+, name:/g)?.length, 40);
   assert.match(content, /Welding Torch conversion/);
   assert.match(content, /6 sec at every tier/);
   assert.doesNotMatch(content, /7 \/ 6 \/ 5 sec · At fight start/);
