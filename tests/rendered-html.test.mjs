@@ -29,6 +29,7 @@ test("server-renders the finished Dooley Runbook", async () => {
   assert.match(html, /TAKE WHEN/);
   assert.match(html, /What actually works together/);
   assert.match(html, /RAMPage Drill/);
+  assert.match(html, /Plasma Rifle/);
   assert.match(html, /core-analysis-lab\.png/);
   assert.match(html, /merchant-pool-lab\.png/);
   assert.match(html, /Patch 16/);
@@ -51,8 +52,15 @@ test("keeps patch content and deployment configuration explicit", async () => {
   assert.match(content, /merchantDirectory/);
   assert.match(content, /coreDepthById/);
   assert.match(content, /topDooleyItems/);
-  assert.match(content, /rank: 40, name: "Alpha Ray", tier: "C"/);
+  assert.match(content, /rank: 10, name: "Plasma Rifle", tier: "A"/);
+  assert.match(content, /rank: 40, name: "Cybersecurity", tier: "C"/);
   assert.equal(content.match(/\{ rank: \d+, name:/g)?.length, 40);
+  assert.match(content, /3\+ pre-shot Burn events/);
+  assert.match(content, /Plasma Rifle — Patch 16\.1 live mechanics/);
+  assert.match(content, /Plasma Rifle conversion/);
+  assert.match(content, /Burn events become direct damage/);
+  assert.match(page, /PURCHASE HEURISTIC/);
+  assert.match(page, /spotlight\.partners\.map/);
   assert.match(content, /Welding Torch conversion/);
   assert.match(content, /6 sec at every tier/);
   assert.doesNotMatch(content, /7 \/ 6 \/ 5 sec · At fight start/);

@@ -10,7 +10,8 @@ A patch-locked strategy reference for playing Dooley in **The Bazaar**. It sits 
 - Seven starting Core choices plus a Launcher specialist route
 - A synthesized 40-item Dooley opportunity tier list with explicit S / A / B / C purchase tests
 - Ten Core-specific item priorities for every route
-- Four synergy packages per Core, including operational and failure conditions
+- At least four synergy packages per Core, including operational and failure conditions
+- A dedicated Plasma Rifle conversion lab for Ignition: event math, sequencing, partners, upgrades, merchants, and purchase gates
 - Three recommended build archetypes per Core
 - Buy / hold / skip priorities
 - Activation order and priorities by run phase

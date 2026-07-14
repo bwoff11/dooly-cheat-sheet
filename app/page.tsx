@@ -16,6 +16,7 @@ import {
   type CoreGuide,
   type GlobalItemTier,
   type GlobalRankedItem,
+  type ItemSpotlight,
   type ItemTier,
   type RankedItem,
   type SynergyPackage,
@@ -95,6 +96,102 @@ function ItemTierBoard({ items }: { items: RankedItem[] }) {
         );
       })}
     </div>
+  );
+}
+
+function ItemSpotlightPanel({ spotlight }: { spotlight: ItemSpotlight }) {
+  return (
+    <article className="item-spotlight" aria-labelledby="item-spotlight-title">
+      <header className="spotlight-header">
+        <span className="spotlight-code" aria-hidden="true">PR</span>
+        <div className="spotlight-title-block">
+          <p>TECHNICAL ITEM SPOTLIGHT</p>
+          <h3 id="item-spotlight-title">{spotlight.item}</h3>
+          <span>{spotlight.title}</span>
+        </div>
+        <p className="spotlight-spec">{spotlight.spec}</p>
+      </header>
+
+      <p className="spotlight-summary">{spotlight.summary}</p>
+
+      <div className="spotlight-data-grid">
+        <section className="spotlight-data spotlight-data-mechanic">
+          <span>CURRENT EFFECT</span>
+          <p>{spotlight.mechanic}</p>
+        </section>
+        <section className="spotlight-data spotlight-data-rule">
+          <span>EVENT RULE</span>
+          <p>{spotlight.rule}</p>
+        </section>
+        <section className="spotlight-data spotlight-data-threshold">
+          <span>PURCHASE HEURISTIC</span>
+          <p>{spotlight.threshold}</p>
+        </section>
+      </div>
+
+      <section className="spotlight-sequence" aria-labelledby="spotlight-sequence-title">
+        <div className="spotlight-section-heading">
+          <p>FIRST-CYCLE ORDER</p>
+          <h4 id="spotlight-sequence-title">Create events before the Rifle resolves</h4>
+        </div>
+        <ol>
+          {spotlight.sequence.map((step) => (
+            <li key={step.label}>
+              <span>{step.label}</span>
+              <p>{step.text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <div className="spotlight-detail-grid">
+        <section className="spotlight-detail spotlight-partners" aria-labelledby="spotlight-partners-title">
+          <div className="spotlight-section-heading">
+            <p>PACKAGE MATRIX</p>
+            <h4 id="spotlight-partners-title">Best partners</h4>
+          </div>
+          <ul>
+            {spotlight.partners.map((partner, index) => (
+              <li key={partner.name}>
+                <span>{(index + 1).toString().padStart(2, "0")}</span>
+                <div><b>{partner.name}</b><p>{partner.why}</p></div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="spotlight-detail spotlight-upgrades" aria-labelledby="spotlight-upgrades-title">
+          <div className="spotlight-section-heading">
+            <p>SCALING MATRIX</p>
+            <h4 id="spotlight-upgrades-title">Upgrade priority</h4>
+          </div>
+          <ul>
+            {spotlight.upgrades.map((upgrade, index) => (
+              <li key={upgrade.name}>
+                <span>{(index + 1).toString().padStart(2, "0")}</span>
+                <div><b>{upgrade.name}</b><p>{upgrade.why}</p></div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+
+      <div className="spotlight-decision-grid">
+        <section className="spotlight-decision spotlight-buy">
+          <p>BUY / CONVERT WHEN</p>
+          <BulletList items={spotlight.buyWhen} tone="good" />
+        </section>
+        <section className="spotlight-decision spotlight-avoid">
+          <p>PASS / REPLACE WHEN</p>
+          <BulletList items={spotlight.avoidWhen} tone="warn" />
+        </section>
+      </div>
+
+      <footer className="spotlight-source">
+        <span>LIVE DATA REFERENCE</span>
+        <a href={spotlight.source.href} target="_blank" rel="noreferrer">{spotlight.source.label} ↗</a>
+      </footer>
+    </article>
   );
 }
 
@@ -196,11 +293,16 @@ function merchantCategory(name: string) {
 }
 
 function BoardMap({ core }: { core: CoreGuide }) {
+  const labels = core.boardLabels ?? {
+    left: "LEFT · FEEDS CORE",
+    right: "RIGHT · RECEIVES CORE EFFECT",
+  };
+
   return (
     <div className="board-wrap" aria-label={`Suggested board logic for ${core.name}`}>
       <div className="board-labels" aria-hidden="true">
-        <span>LEFT · FEEDS CORE</span>
-        <span>RIGHT · RECEIVES CORE EFFECT</span>
+        <span>{labels.left}</span>
+        <span>{labels.right}</span>
       </div>
       <div className="board-map">
         {core.board.map((slot, index) => (
@@ -215,7 +317,7 @@ function BoardMap({ core }: { core: CoreGuide }) {
           </div>
         ))}
       </div>
-      <p className="board-caption">General activation order. Exact slots depend on item sizes and the selected build.</p>
+      <p className="board-caption">{core.boardCaption ?? "General activation order. Exact slots depend on item sizes and the selected build."}</p>
     </div>
   );
 }
@@ -462,6 +564,7 @@ export default function Home() {
             <div className="subsection item-tier-section" id="item-tiers">
               <SectionHeading eyebrow="03 // CORE ITEM TIERS" title={`Top items for ${selected.shortName}`} note="Tiers are relative to this Core, not raw card power. S means route-defining; B means the item needs a specific package or breakpoint." />
               <ItemTierBoard items={depth.itemRanks} />
+              {depth.spotlight ? <ItemSpotlightPanel spotlight={depth.spotlight} /> : null}
             </div>
 
             <div className="subsection synergy-section" id="synergies">
